@@ -5,6 +5,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbxA1aK62FF4yJTvUwvk_l7X
 let canciones = [];
 let cultos = [];
 let cancionActual = null;
+let transposicionActual = 0;
 
 // ===== INICIALIZACIÓN =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,13 +16,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== FUNCIONES DE PESTAÑAS =====
 function cambiarTab(tab) {
-    // Ocultar todas las secciones
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     
-    // Mostrar sección seleccionada
     document.getElementById(`${tab}-section`).classList.add('active');
     event.target.classList.add('active');
+}
+
+// ===== FUNCIONES DE PANEL DE ACORDES =====
+function cambiarCategoriaAcordes(categoria) {
+    // Ocultar todos los grids
+    document.querySelectorAll('.acordes-grid').forEach(grid => {
+        grid.style.display = 'none';
+    });
+    
+    // Desactivar todos los botones
+    document.querySelectorAll('.categoria-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Mostrar grid seleccionado
+    document.getElementById(`acordes-${categoria}`).style.display = 'grid';
+    event.target.classList.add('active');
+}
+
+function insertarAcorde(acorde) {
+    const textarea = document.getElementById('letra');
+    const inicio = textarea.selectionStart;
+    const fin = textarea.selectionEnd;
+    const textoAntes = textarea.value.substring(0, inicio);
+    const textoDespues = textarea.value.substring(fin);
+    
+    // Insertar acorde en formato [Acorde]
+    const acordeFormateado = `[${acorde}]`;
+    textarea.value = textoAntes + acordeFormateado + textoDespues;
+    
+    // Posicionar cursor después del acorde
+    const nuevaPosicion = inicio + acordeFormateado.length;
+    textarea.selectionStart = nuevaPosicion;
+    textarea.selectionEnd = nuevaPosicion;
+    textarea.focus();
 }
 
 // ===== FUNCIONES DE CANCIONES =====
@@ -81,18 +115,78 @@ function verCancion(id) {
     
     if (!cancionActual) return;
     
+    transposicionActual = 0;
+    
     document.getElementById('modalTitulo').textContent = cancionActual.titulo;
     document.getElementById('modalInfo').textContent = 
-        `Tonalidad: ${cancionActual.tonalidad} | Autor: ${cancionActual.autor || 'Desconocido'}`;
-    document.getElementById('modalLetra').textContent = cancionActual.letra;
-    document.getElementById('transponerSelect').value = '0';
+        `Tonalidad Original: ${cancionActual.tonalidad} | Autor: ${cancionActual.autor || 'Desconocido'}`;
+    
+    // Mostrar letra con líneas vacías para acordes
+    mostrarLetraConLineasVacias(cancionActual.letra);
+    
+    document.getElementById('tonalidadActual').textContent = cancionActual.tonalidad;
     
     document.getElementById('modalVerCancion').classList.add('active');
+}
+
+function mostrarLetraConLineasVacias(letra) {
+    const container = document.getElementById('modalLetra');
+    container.innerHTML = '';
+    
+    // Procesar la letra línea por línea
+    const lineas = letra.split('\n');
+    
+    lineas.forEach(linea => {
+        // Crear línea para acordes
+        const lineaAcordes = document.createElement('div');
+        lineaAcordes.className = 'linea-acordes';
+        
+        // Crear línea para letra
+        const lineaLetra = document.createElement('div');
+        lineaLetra.className = 'linea-letra';
+        
+        // Extraer acordes y texto
+        let posicion = 0;
+        let textoAcordes = '';
+        let textoLetra = '';
+        
+        // Buscar todos los acordes [X] en la línea
+        const regex = /\[([^\]]+)\]/g;
+        let match;
+        let ultimoIndice = 0;
+        
+        while ((match = regex.exec(linea)) !== null) {
+            const acordeInicio = match.index;
+            const acorde = match[1];
+            
+            // Agregar espacios hasta la posición del acorde
+            const espacios = acordeInicio - ultimoIndice;
+            textoAcordes += ' '.repeat(espacios) + acorde;
+            
+            // Agregar el texto antes del acorde a la letra
+            textoLetra += linea.substring(ultimoIndice, acordeInicio);
+            
+            ultimoIndice = regex.lastIndex;
+        }
+        
+        // Agregar el resto del texto
+        textoLetra += linea.substring(ultimoIndice);
+        
+        // Remover acordes del texto de letra
+        textoLetra = textoLetra.replace(/\[([^\]]+)\]/g, '');
+        
+        lineaAcordes.textContent = textoAcordes || ' ';
+        lineaLetra.textContent = textoLetra || ' ';
+        
+        container.appendChild(lineaAcordes);
+        container.appendChild(lineaLetra);
+    });
 }
 
 function cerrarModal() {
     document.getElementById('modalVerCancion').classList.remove('active');
     cancionActual = null;
+    transposicionActual = 0;
 }
 
 async function guardarCancion(event) {
@@ -185,20 +279,45 @@ async function eliminarCancionActual() {
 }
 
 // ===== FUNCIONES DE TRANSPOSICIÓN =====
-function transponerCancion() {
+function transponerRapido(semitonos) {
     if (!cancionActual) return;
     
-    const semitonos = parseInt(document.getElementById('transponerSelect').value);
+    transposicionActual = semitonos;
     const letraTranspuesta = transponerLetra(cancionActual.letra, semitonos);
-    document.getElementById('modalLetra').textContent = letraTranspuesta;
+    mostrarLetraConLineasVacias(letraTranspuesta);
+    
+    // Actualizar tonalidad mostrada
+    const nuevaTonalidad = transponerTonalidad(cancionActual.tonalidad, semitonos);
+    document.getElementById('tonalidadActual').textContent = nuevaTonalidad;
+}
+
+function transponerTonalidad(tonalidad, semitonos) {
+    const acordes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const indice = acordes.indexOf(tonalidad);
+    
+    if (indice === -1) return tonalidad;
+    
+    const nuevoIndice = (indice + semitonos + 12) % 12;
+    return acordes[nuevoIndice];
 }
 
 function transponerLetra(letra, semitonos) {
+    if (semitonos === 0) return letra;
+    
     const acordes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const acordesAlternativos = {
+        'Db': 'C#', 'Eb': 'D#', 'Gb': 'F#', 'Ab': 'G#', 'Bb': 'A#'
+    };
     
     return letra.replace(/\[([^\]]+)\]/g, (match, acorde) => {
+        // Normalizar acordes con bemol
+        let acordeNormalizado = acorde;
+        for (let [bemol, sostenido] of Object.entries(acordesAlternativos)) {
+            acordeNormalizado = acordeNormalizado.replace(bemol, sostenido);
+        }
+        
         // Separar el acorde base de las modificaciones (m, 7, sus, etc.)
-        const matches = acorde.match(/^([A-G]#?)(.*)$/);
+        const matches = acordeNormalizado.match(/^([A-G]#?)(.*)$/);
         if (!matches) return match;
         
         const [, acordeBase, modificadores] = matches;
@@ -314,7 +433,7 @@ function instalarApp() {
     });
 }
 
-// ===== FUNCIONES AUXILIARES =====
+// ===== FUNCIONES AUXILIARES =====GIT
 function mostrarError(mensaje) {
     document.getElementById('cancionesList').innerHTML = `
         <div class="empty-state">

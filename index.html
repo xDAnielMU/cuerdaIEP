@@ -74,11 +74,81 @@
                         <label>Autor</label>
                         <input type="text" id="autor">
                     </div>
+                    
+                    <!-- Panel de Acordes -->
+                    <div class="acordes-panel">
+                        <h3>🎼 Insertar Acordes (Cifrado)</h3>
+                        <div class="acordes-categorias">
+                            <button type="button" class="categoria-btn active" onclick="cambiarCategoriaAcordes('mayores')">Mayores</button>
+                            <button type="button" class="categoria-btn" onclick="cambiarCategoriaAcordes('menores')">Menores</button>
+                            <button type="button" class="categoria-btn" onclick="cambiarCategoriaAcordes('septima')">Séptima</button>
+                            <button type="button" class="categoria-btn" onclick="cambiarCategoriaAcordes('otros')">Otros</button>
+                        </div>
+                        
+                        <div id="acordes-mayores" class="acordes-grid">
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('C')">C</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('C#')">C#</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('D')">D</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('D#')">D#</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('E')">E</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('F')">F</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('F#')">F#</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('G')">G</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('G#')">G#</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('A')">A</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('A#')">A#</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('B')">B</button>
+                        </div>
+                        
+                        <div id="acordes-menores" class="acordes-grid" style="display: none;">
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Cm')">Cm</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('C#m')">C#m</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Dm')">Dm</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('D#m')">D#m</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Em')">Em</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Fm')">Fm</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('F#m')">F#m</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Gm')">Gm</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('G#m')">G#m</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Am')">Am</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('A#m')">A#m</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Bm')">Bm</button>
+                        </div>
+                        
+                        <div id="acordes-septima" class="acordes-grid" style="display: none;">
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('C7')">C7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('D7')">D7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('E7')">E7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('F7')">F7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('G7')">G7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('A7')">A7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('B7')">B7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Cmaj7')">Cmaj7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Dmaj7')">Dmaj7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Emaj7')">Emaj7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Gmaj7')">Gmaj7</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Amaj7')">Amaj7</button>
+                        </div>
+                        
+                        <div id="acordes-otros" class="acordes-grid" style="display: none;">
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Csus')">Csus</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Dsus')">Dsus</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Esus')">Esus</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Gsus')">Gsus</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Asus')">Asus</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Cdim')">Cdim</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Ddim')">Ddim</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Edim')">Edim</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Caug')">Caug</button>
+                            <button type="button" class="acorde-btn" onclick="insertarAcorde('Daug')">Daug</button>
+                        </div>
+                    </div>
+                    
                     <div class="form-group">
                         <label>Letra con acordes *</label>
-                        <textarea id="letra" required placeholder="Escribe la letra con acordes. Ejemplo:
-[G]Sublime [D]gracia del [Em]Señor
-[C]Que a un [G]infeliz [D]salvó"></textarea>
+                        <textarea id="letra" required placeholder="Escribe la letra aquí. Usa el panel de acordes para insertarlos.
+
+Consejo: Escribe primero la letra completa, luego posiciona el cursor donde quieres un acorde y haz clic en el panel de acordes."></textarea>
                     </div>
                     <button type="submit" class="btn">💾 Guardar Canción</button>
                 </form>
@@ -91,25 +161,24 @@
         <div class="modal-content">
             <h2 id="modalTitulo"></h2>
             <p id="modalInfo" style="color: #6b7280; margin-bottom: 20px;"></p>
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: 600;">Transponer a:</label>
-                <select id="transponerSelect" onchange="transponerCancion()">
-                    <option value="0">Tonalidad original</option>
-                    <option value="1">+1 semitono</option>
-                    <option value="2">+2 semitonos</option>
-                    <option value="3">+3 semitonos</option>
-                    <option value="4">+4 semitonos</option>
-                    <option value="5">+5 semitonos</option>
-                    <option value="6">+6 semitonos</option>
-                    <option value="-1">-1 semitono</option>
-                    <option value="-2">-2 semitonos</option>
-                    <option value="-3">-3 semitonos</option>
-                    <option value="-4">-4 semitonos</option>
-                    <option value="-5">-5 semitonos</option>
-                    <option value="-6">-6 semitonos</option>
-                </select>
+            
+            <!-- Controles de Transposición Mejorados -->
+            <div class="transponer-controles">
+                <h3>🎼 Transponer Tonalidad</h3>
+                <div class="transponer-botones">
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(-6)">-3 tonos</button>
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(-2)">-1 tono</button>
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(-1)">-½ tono</button>
+                    <button type="button" class="btn-transponer original" onclick="transponerRapido(0)">Original</button>
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(1)">+½ tono</button>
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(2)">+1 tono</button>
+                    <button type="button" class="btn-transponer" onclick="transponerRapido(6)">+3 tonos</button>
+                </div>
+                <p class="transponer-info">Tonalidad actual: <strong id="tonalidadActual">-</strong></p>
             </div>
-            <pre id="modalLetra" style="background: #f9fafb; padding: 20px; border-radius: 8px; white-space: pre-wrap; font-family: 'Courier New', monospace;"></pre>
+            
+            <div id="modalLetra" class="letra-display"></div>
+            
             <div class="form-actions">
                 <button class="btn btn-secondary" onclick="editarCancionActual()">✏️ Editar</button>
                 <button class="btn btn-danger" onclick="eliminarCancionActual()">🗑️ Eliminar</button>

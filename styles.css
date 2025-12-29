@@ -193,6 +193,171 @@ h1 {
     margin-bottom: 10px;
 }
 
+/* ===== PANEL DE ACORDES ===== */
+.acordes-panel {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #e5e7eb;
+}
+
+.acordes-panel h3 {
+    color: #1f2937;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.acordes-categorias {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.categoria-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+
+.categoria-btn:hover {
+    border-color: #4F46E5;
+    color: #4F46E5;
+}
+
+.categoria-btn.active {
+    background: #4F46E5;
+    color: white;
+    border-color: #4F46E5;
+}
+
+.acordes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 8px;
+}
+
+.acorde-btn {
+    padding: 12px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1em;
+    color: #DC2626;
+    transition: all 0.3s;
+}
+
+.acorde-btn:hover {
+    background: #DC2626;
+    color: white;
+    border-color: #DC2626;
+    transform: scale(1.05);
+}
+
+/* ===== CONTROLES DE TRANSPOSICIÓN ===== */
+.transponer-controles {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #e5e7eb;
+}
+
+.transponer-controles h3 {
+    color: #1f2937;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.transponer-botones {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.btn-transponer {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+
+.btn-transponer:hover {
+    background: #4F46E5;
+    color: white;
+    border-color: #4F46E5;
+    transform: translateY(-2px);
+}
+
+.btn-transponer.original {
+    background: #10B981;
+    color: white;
+    border-color: #10B981;
+}
+
+.btn-transponer.original:hover {
+    background: #059669;
+    border-color: #059669;
+}
+
+.transponer-info {
+    color: #6b7280;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.transponer-info strong {
+    color: #DC2626;
+    font-size: 1.1em;
+}
+
+/* ===== DISPLAY DE LETRA ===== */
+.letra-display {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    line-height: 2.2;
+    white-space: pre-wrap;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.letra-display .linea-acordes {
+    color: #DC2626;
+    font-weight: 700;
+    font-size: 1.1em;
+    min-height: 24px;
+}
+
+.letra-display .linea-letra {
+    color: #1f2937;
+    min-height: 24px;
+}
+
+.letra-display .acorde-inline {
+    color: #DC2626;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+/* ===== MODAL ===== */
 .modal {
     display: none;
     position: fixed;
@@ -214,7 +379,7 @@ h1 {
     background: white;
     padding: 30px;
     border-radius: 15px;
-    max-width: 600px;
+    max-width: 700px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
@@ -243,13 +408,10 @@ h1 {
 }
 
 .form-group textarea {
-    min-height: 120px;
+    min-height: 200px;
     font-family: 'Courier New', monospace;
     resize: vertical;
-}
-
-.form-group textarea#letra {
-    min-height: 200px;
+    line-height: 1.8;
 }
 
 .form-actions {
@@ -274,32 +436,6 @@ h1 {
 .empty-state-icon {
     font-size: 4em;
     margin-bottom: 20px;
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.5em;
-    }
-
-    .tabs {
-        flex-direction: column;
-    }
-
-    .content {
-        padding: 20px;
-    }
-
-    .cancion-actions {
-        flex-direction: column;
-    }
-
-    .form-actions {
-        flex-direction: column;
-    }
-
-    .form-actions button {
-        width: 100%;
-    }
 }
 
 .install-prompt {
@@ -327,7 +463,48 @@ h1 {
     background: #f0fdf4;
 }
 
-.acorde {
-    color: #DC2626;
-    font-weight: 700;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .content {
+        padding: 20px;
+    }
+
+    .acordes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    }
+
+    .transponer-botones {
+        justify-content: center;
+    }
+
+    .btn-transponer {
+        padding: 8px 12px;
+        font-size: 0.85em;
+    }
+
+    .cancion-actions,
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+
+    .letra-display {
+        font-size: 0.9em;
+        padding: 15px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
 }
