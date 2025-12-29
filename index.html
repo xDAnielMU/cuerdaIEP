@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4F46E5">
+    <title>Cancionero IEP</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="install-prompt" id="installPrompt">
+        <span>📱 ¡Instala esta app en tu dispositivo!</span>
+        <button class="btn" onclick="instalarApp()">Instalar</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>🎵 Cancionero IEP</h1>
+            <p class="subtitle">Repositorio de canciones para músicos cristianos</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="cambiarTab('canciones')">📚 Canciones</button>
+            <button class="tab" onclick="cambiarTab('cultos')">📋 Cultos</button>
+            <button class="tab" onclick="cambiarTab('agregar')">➕ Nueva Canción</button>
+        </div>
+
+        <div class="content">
+            <!-- Sección Canciones -->
+            <div id="canciones-section" class="section active">
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Buscar canción..." oninput="buscarCanciones()">
+                <button class="btn btn-secondary" onclick="sincronizarCanciones()" style="margin-bottom: 20px;">🔄 Actualizar</button>
+                <div id="cancionesList">
+                    <div class="loading">Cargando canciones...</div>
+                </div>
+            </div>
+
+            <!-- Sección Cultos -->
+            <div id="cultos-section" class="section">
+                <button class="btn" onclick="mostrarModalNuevoCulto()" style="margin-bottom: 20px;">➕ Nuevo Culto</button>
+                <div id="cultosList">
+                    <div class="loading">Cargando cultos...</div>
+                </div>
+            </div>
+
+            <!-- Sección Agregar Canción -->
+            <div id="agregar-section" class="section">
+                <h2 style="margin-bottom: 20px;">Nueva Canción</h2>
+                <form id="formNuevaCancion" onsubmit="guardarCancion(event)">
+                    <div class="form-group">
+                        <label>Título de la canción *</label>
+                        <input type="text" id="titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tonalidad *</label>
+                        <select id="tonalidad" required>
+                            <option value="">Seleccionar...</option>
+                            <option value="C">C (Do)</option>
+                            <option value="C#">C# (Do#)</option>
+                            <option value="D">D (Re)</option>
+                            <option value="D#">D# (Re#)</option>
+                            <option value="E">E (Mi)</option>
+                            <option value="F">F (Fa)</option>
+                            <option value="F#">F# (Fa#)</option>
+                            <option value="G">G (Sol)</option>
+                            <option value="G#">G# (Sol#)</option>
+                            <option value="A">A (La)</option>
+                            <option value="A#">A# (La#)</option>
+                            <option value="B">B (Si)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Autor</label>
+                        <input type="text" id="autor">
+                    </div>
+                    <div class="form-group">
+                        <label>Letra con acordes *</label>
+                        <textarea id="letra" required placeholder="Escribe la letra con acordes. Ejemplo:
+[G]Sublime [D]gracia del [Em]Señor
+[C]Que a un [G]infeliz [D]salvó"></textarea>
+                    </div>
+                    <button type="submit" class="btn">💾 Guardar Canción</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ver Canción -->
+    <div id="modalVerCancion" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitulo"></h2>
+            <p id="modalInfo" style="color: #6b7280; margin-bottom: 20px;"></p>
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: 600;">Transponer a:</label>
+                <select id="transponerSelect" onchange="transponerCancion()">
+                    <option value="0">Tonalidad original</option>
+                    <option value="1">+1 semitono</option>
+                    <option value="2">+2 semitonos</option>
+                    <option value="3">+3 semitonos</option>
+                    <option value="4">+4 semitonos</option>
+                    <option value="5">+5 semitonos</option>
+                    <option value="6">+6 semitonos</option>
+                    <option value="-1">-1 semitono</option>
+                    <option value="-2">-2 semitonos</option>
+                    <option value="-3">-3 semitonos</option>
+                    <option value="-4">-4 semitonos</option>
+                    <option value="-5">-5 semitonos</option>
+                    <option value="-6">-6 semitonos</option>
+                </select>
+            </div>
+            <pre id="modalLetra" style="background: #f9fafb; padding: 20px; border-radius: 8px; white-space: pre-wrap; font-family: 'Courier New', monospace;"></pre>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="editarCancionActual()">✏️ Editar</button>
+                <button class="btn btn-danger" onclick="eliminarCancionActual()">🗑️ Eliminar</button>
+                <button class="btn" onclick="cerrarModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Culto -->
+    <div id="modalNuevoCulto" class="modal">
+        <div class="modal-content">
+            <h2>Nuevo Culto</h2>
+            <form id="formNuevoCulto" onsubmit="guardarCulto(event)">
+                <div class="form-group">
+                    <label>Nombre del culto *</label>
+                    <input type="text" id="nombreCulto" required placeholder="Ej: Culto Domingo Mañana">
+                </div>
+                <div class="form-group">
+                    <label>Fecha *</label>
+                    <input type="date" id="fechaCulto" required>
+                </div>
+                <div class="form-group">
+                    <label>Hora *</label>
+                    <input type="time" id="horaCulto" required>
+                </div>
+                <div class="form-group">
+                    <label>Notas</label>
+                    <textarea id="notasCulto" placeholder="Notas adicionales..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">💾 Crear Culto</button>
+                    <button type="button" class="btn" onclick="cerrarModalCulto()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
