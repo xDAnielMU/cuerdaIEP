@@ -4,75 +4,234 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    color: #333;
+:root {
+    --primary-orange: #FF6B35;
+    --dark-bg: #000000;
+    --card-bg: #1a1a1a;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --accent-yellow: #FFA500;
+    --accent-red: #FF4444;
+    --accent-green: #10B981;
 }
 
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: var(--dark-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding-bottom: 80px;
+}
+
+/* ===== HEADER PRINCIPAL ===== */
+.main-header {
+    background: var(--dark-bg);
+    border-bottom: 1px solid #333;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-container {
+    width: 45px;
+    height: 45px;
+    background: var(--primary-orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-icon {
+    font-size: 24px;
+}
+
+.app-title {
+    flex: 1;
+    font-size: 1.3em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+}
+
+.header-btn {
+    width: 45px;
+    height: 45px;
+    background: var(--dark-bg);
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.header-btn:hover {
+    background: #1a1a1a;
+}
+
+/* ===== BARRA DE BÚSQUEDA ===== */
+.search-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 25px;
+    color: var(--text-primary);
+    font-size: 1em;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+}
+
+.add-btn {
+    width: 55px;
+    height: 55px;
+    background: var(--primary-orange);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.add-icon {
+    font-size: 30px;
+    font-weight: 300;
+}
+
+.add-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ===== CONTROLES DE SELECCIÓN ===== */
+.selection-controls {
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    padding: 0 20px;
+}
+
+.btn-seleccionar {
+    width: 100%;
+    padding: 12px 20px;
+    background: var(--accent-green);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-seleccionar:hover {
+    background: #0d9668;
+}
+
+.botones-accion-seleccion {
+    display: none;
+    gap: 10px;
+    align-items: center;
+}
+
+.contador-seleccionadas {
+    flex: 1;
+    padding: 12px 15px;
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent-yellow);
+}
+
+.btn-asignar-culto {
+    padding: 12px 20px;
+    background: var(--primary-orange);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-asignar-culto:hover {
+    background: #ff5520;
+}
+
+.btn-cancelar-seleccion {
+    padding: 12px 20px;
+    background: transparent;
+    border: 2px solid #333;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancelar-seleccion:hover {
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
-}
-
-header {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-h1 {
-    color: #4F46E5;
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.subtitle {
-    color: #666;
-    font-size: 0.9em;
-}
-
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    background: white;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.tab {
-    flex: 1;
-    padding: 15px;
-    background: #f3f4f6;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.tab.active {
-    background: #4F46E5;
-    color: white;
-}
-
-.tab:hover {
-    transform: translateY(-2px);
-}
-
-.content {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    min-height: 400px;
+    padding: 0 20px;
 }
 
 .section {
@@ -83,306 +242,141 @@ h1 {
     display: block;
 }
 
-.btn {
-    background: #4F46E5;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.btn:hover {
-    background: #4338CA;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
-}
-
-.btn-secondary {
-    background: #10B981;
-}
-
-.btn-secondary:hover {
-    background: #059669;
-}
-
-.btn-danger {
-    background: #EF4444;
-}
-
-.btn-danger:hover {
-    background: #DC2626;
-}
-
-.search-box {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: 1em;
-    margin-bottom: 20px;
-    transition: border 0.3s;
-}
-
-.search-box:focus {
-    outline: none;
-    border-color: #4F46E5;
+/* ===== LISTA DE CANCIONES ===== */
+#cancionesList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .cancion-item {
-    background: #f9fafb;
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 15px;
     padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    border-left: 4px solid #4F46E5;
-    transition: all 0.3s;
     cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.cancion-item.selected {
+    border-color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .cancion-item:hover {
+    background: #252525;
     transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cancion-checkbox {
+    display: none;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cancion-checkbox input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.cancion-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cancion-icon {
+    width: 55px;
+    height: 55px;
+    background: var(--primary-orange);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.cancion-details {
+    flex: 1;
 }
 
 .cancion-title {
-    font-size: 1.3em;
+    font-size: 1.2em;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--text-primary);
     margin-bottom: 5px;
 }
 
 .cancion-info {
-    color: #6b7280;
+    color: var(--text-secondary);
     font-size: 0.9em;
-    margin-bottom: 10px;
-}
-
-.cancion-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.culto-item {
-    background: #f0fdf4;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    border-left: 4px solid #10B981;
-    transition: all 0.3s;
-}
-
-.culto-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.culto-title {
-    font-size: 1.3em;
-    font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 5px;
-}
-
-.culto-info {
-    color: #6b7280;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-}
-
-/* ===== PANEL DE ACORDES ===== */
-.acordes-panel {
-    background: #f9fafb;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #e5e7eb;
-}
-
-.acordes-panel h3 {
-    color: #1f2937;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-}
-
-.acordes-categorias {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
-.categoria-btn {
-    padding: 8px 16px;
-    background: white;
-    border: 2px solid #e5e7eb;
+.cancion-badge {
+    background: var(--accent-yellow);
+    color: #000;
+    padding: 4px 10px;
     border-radius: 6px;
-    cursor: pointer;
+    font-size: 0.85em;
     font-weight: 600;
-    font-size: 0.9em;
-    transition: all 0.3s;
 }
 
-.categoria-btn:hover {
-    border-color: #4F46E5;
-    color: #4F46E5;
+.chord-badge {
+    display: inline-block;
+    background: rgba(255, 165, 0, 0.2);
+    color: var(--accent-yellow);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-right: 5px;
 }
 
-.categoria-btn.active {
-    background: #4F46E5;
-    color: white;
-    border-color: #4F46E5;
-}
-
-.acordes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-    gap: 8px;
-}
-
-.acorde-btn {
-    padding: 12px;
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1em;
-    color: #DC2626;
-    transition: all 0.3s;
-}
-
-.acorde-btn:hover {
-    background: #DC2626;
-    color: white;
-    border-color: #DC2626;
-    transform: scale(1.05);
-}
-
-/* ===== CONTROLES DE TRANSPOSICIÓN ===== */
-.transponer-controles {
-    background: #f9fafb;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #e5e7eb;
-}
-
-.transponer-controles h3 {
-    color: #1f2937;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-}
-
-.transponer-botones {
+/* ===== FORMULARIO AGREGAR CANCIÓN ===== */
+.form-header {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-}
-
-.btn-transponer {
-    padding: 10px 16px;
-    background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9em;
-    transition: all 0.3s;
-}
-
-.btn-transponer:hover {
-    background: #4F46E5;
-    color: white;
-    border-color: #4F46E5;
-    transform: translateY(-2px);
-}
-
-.btn-transponer.original {
-    background: #10B981;
-    color: white;
-    border-color: #10B981;
-}
-
-.btn-transponer.original:hover {
-    background: #059669;
-    border-color: #059669;
-}
-
-.transponer-info {
-    color: #6b7280;
-    font-size: 0.9em;
-    margin-top: 10px;
-}
-
-.transponer-info strong {
-    color: #DC2626;
-    font-size: 1.1em;
-}
-
-/* ===== DISPLAY DE LETRA ===== */
-.letra-display {
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    border: 2px solid #e5e7eb;
-    margin-bottom: 20px;
-    font-family: 'Courier New', monospace;
-    font-size: 1em;
-    line-height: 2.2;
-    white-space: pre-wrap;
-    max-height: 500px;
-    overflow-y: auto;
-}
-
-.letra-display .linea-acordes {
-    color: #DC2626;
-    font-weight: 700;
-    font-size: 1.1em;
-    min-height: 24px;
-}
-
-.letra-display .linea-letra {
-    color: #1f2937;
-    min-height: 24px;
-}
-
-.letra-display .acorde-inline {
-    color: #DC2626;
-    font-weight: 700;
-    font-size: 1.1em;
-}
-
-/* ===== MODAL ===== */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
     align-items: center;
-    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
 }
 
-.modal.active {
+.back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.1em;
+    cursor: pointer;
     display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    max-width: 700px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
+.back-btn:hover {
+    color: var(--primary-orange);
+}
+
+.form-header h2 {
+    font-size: 1.5em;
+    color: var(--text-primary);
+}
+
+.song-form {
+    max-width: 800px;
 }
 
 .form-group {
@@ -393,44 +387,635 @@ h1 {
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #374151;
+    color: var(--text-primary);
+    font-size: 1em;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select {
+.help-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: var(--text-secondary);
+    color: var(--dark-bg);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    font-size: 12px;
+    cursor: help;
+    margin-left: 5px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
     width: 100%;
-    padding: 12px;
-    border: 2px solid #e5e7eb;
+    padding: 12px 15px;
+    background: var(--card-bg);
+    border: 1px solid #333;
     border-radius: 8px;
+    color: var(--text-primary);
     font-size: 1em;
     font-family: inherit;
 }
 
-.form-group textarea {
-    min-height: 200px;
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+}
+
+.form-textarea {
+    min-height: 300px;
     font-family: 'Courier New', monospace;
     resize: vertical;
     line-height: 1.8;
 }
 
-.form-actions {
+.form-hint {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+/* ===== GRILLA DE ACORDES ===== */
+.chords-section {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.chords-grid-main {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.chord-btn-main {
+    padding: 15px;
+    background: transparent;
+    border: 2px solid #DC2626;
+    border-radius: 8px;
+    color: #DC2626;
+    font-weight: 700;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.chord-btn-main:hover,
+.chord-btn-main.active {
+    background: #DC2626;
+    color: white;
+    transform: scale(1.05);
+}
+
+.chords-variants {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+.chords-variants.show {
+    display: grid;
+}
+
+.variant-btn {
+    padding: 12px;
+    background: rgba(255, 165, 0, 0.15);
+    border: 2px solid var(--accent-yellow);
+    border-radius: 6px;
+    color: var(--accent-yellow);
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.variant-btn:hover {
+    background: var(--accent-yellow);
+    color: #000;
+    transform: translateY(-2px);
+}
+
+/* ===== ACCIONES DEL FORMULARIO ===== */
+.form-actions-bottom {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn-save {
+    flex: 1;
+    padding: 15px;
+    background: var(--primary-orange);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-save:hover {
+    background: #ff5520;
+    transform: translateY(-2px);
+}
+
+.btn-cancel {
+    padding: 15px 30px;
+    background: transparent;
+    border: 2px solid #333;
+    border-radius: 10px;
+    color: var(--text-primary);
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-cancel:hover {
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+/* ===== MODAL VER CANCIÓN ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-content-song {
+    background: var(--dark-bg);
+    min-height: 100vh;
+    padding-bottom: 100px;
+}
+
+/* Header del Modal */
+.modal-song-header {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.back-modal-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.back-modal-btn:hover {
+    color: var(--primary-orange);
+}
+
+.song-info-header {
+    flex: 1;
+}
+
+.song-info-header h2 {
+    font-size: 1.3em;
+    margin-bottom: 5px;
+}
+
+.song-meta {
+    display: flex;
+    gap: 15px;
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+.edit-btn-header,
+.delete-btn-header {
+    background: transparent;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.edit-btn-header:hover {
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+}
+
+.delete-btn-header:hover {
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+/* Controles de Tono */
+.tone-controls {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    border-bottom: 1px solid #333;
+}
+
+.tone-btn {
+    width: 50px;
+    height: 50px;
+    background: #333;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 2em;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.tone-btn.tone-down:hover {
+    background: var(--accent-red);
+    transform: scale(1.1);
+}
+
+.tone-btn.tone-up:hover {
+    background: var(--accent-green);
+    transform: scale(1.1);
+}
+
+.tone-display {
+    text-align: center;
+}
+
+.tone-label {
+    display: block;
+    font-size: 0.75em;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+}
+
+.tone-value {
+    display: block;
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Controles de Tamaño de Texto */
+.text-controls {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.text-btn {
+    width: 45px;
+    height: 45px;
+    background: #333;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-weight: 700;
+}
+
+.text-btn:hover {
+    background: var(--primary-orange);
+    transform: scale(1.05);
+}
+
+.text-btn.text-reset {
+    background: #666;
+    font-size: 1.5em;
+}
+/* Controles adicionales */
+.additional-controls {
+    background: var(--card-bg);
+    padding: 15px 20px;
     display: flex;
     gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+    border-bottom: 1px solid #333;
 }
 
-.loading {
-    text-align: center;
-    padding: 40px;
-    color: #6b7280;
+.control-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
 }
 
+.btn-fullscreen {
+    background: #667eea;
+}
+
+.btn-fullscreen:hover {
+    background: #5568d3;
+}
+
+.btn-share {
+    background: #25D366;
+}
+
+.btn-share:hover {
+    background: #20b858;
+}
+
+/* Botón salir de pantalla completa */
+.exit-fullscreen-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background: rgba(255, 68, 68, 0.9);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.exit-fullscreen-btn:hover {
+    background: rgba(255, 34, 34, 0.95);
+}
+
+/* Modo pantalla completa */
+.modal.fullscreen-mode {
+    background: var(--dark-bg);
+}
+
+.modal.fullscreen-mode .modal-song-header,
+.modal.fullscreen-mode .tone-controls,
+.modal.fullscreen-mode .text-controls,
+.modal.fullscreen-mode .additional-controls {
+    display: none;
+}
+
+.modal.fullscreen-mode .exit-fullscreen-btn {
+    display: block;
+}
+
+.modal.fullscreen-mode .song-lyrics-container {
+    padding: 60px 20px 20px 20px;
+    max-width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* CORRECCIÓN: Letra con Acordes - Posición Exacta */
+.song-lyrics-container {
+    padding: 30px 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.song-lyrics {
+    color: var(--text-primary);
+    font-family: 'Courier New', monospace;
+    font-size: 1em;
+    line-height: 2;
+    white-space: pre-wrap;
+}
+
+.linea-letra {
+    position: relative;
+    padding-top: 28px;
+    padding-bottom: 8px;
+    min-height: 50px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+}
+
+.acorde-flotante {
+    position: absolute;
+    top: 0;
+    color: var(--accent-yellow);
+    font-weight: 700;
+    font-size: 0.85em;
+    background: rgba(255, 165, 0, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* ===== HEADER CULTOS ===== */
+.cultos-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.cultos-header h2 {
+    flex: 1;
+    font-size: 1.5em;
+}
+
+/* ===== LISTA DE CULTOS ===== */
+.culto-item {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-left: 4px solid var(--primary-orange);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.culto-item:hover {
+    background: #252525;
+    transform: translateX(5px);
+}
+
+.culto-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.culto-info {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+/* ===== DETALLE CULTO ===== */
+.culto-detalle-info {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.culto-detalle-info p {
+    margin: 8px 0;
+    color: var(--text-secondary);
+}
+
+.lista-canciones-culto {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.culto-cancion-item {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.culto-cancion-numero {
+    width: 40px;
+    height: 40px;
+    background: var(--primary-orange);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
+.culto-cancion-info {
+    flex: 1;
+}
+
+.culto-cancion-titulo {
+    font-weight: 700;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.culto-cancion-meta {
+    color: var(--text-secondary);
+    font-size: 0.85em;
+}
+
+.btn-ver-cancion-culto {
+    padding: 10px 20px;
+    background: var(--primary-orange);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-ver-cancion-culto:hover {
+    background: #ff5520;
+}
+
+/* ===== MODAL SIMPLE ===== */
+.modal-content {
+    background: var(--card-bg);
+    max-width: 600px;
+    margin: 50px auto;
+    border-radius: 15px;
+    padding: 30px;
+}
+
+.modal-header-simple {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+}
+
+.modal-header-simple h2 {
+    font-size: 1.5em;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5em;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.close-btn:hover {
+    background: #333;
+}
+
+.form-actions-modal {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+/* ===== ESTADOS VACÍOS Y CARGA ===== */
+.loading,
 .empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #9ca3af;
+    color: var(--text-secondary);
 }
 
 .empty-state-icon {
@@ -438,73 +1023,120 @@ h1 {
     margin-bottom: 20px;
 }
 
-.install-prompt {
-    background: #10B981;
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 20px;
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
-}
-
-.install-prompt.show {
+/* ===== BOTONES FLOTANTES INFERIORES ===== */
+.bottom-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     display: flex;
+    gap: 15px;
+    padding: 15px 20px;
+    background: var(--dark-bg);
+    border-top: 1px solid #333;
+    z-index: 100;
 }
 
-.install-prompt button {
-    background: white;
-    color: #10B981;
+.bottom-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-.install-prompt button:hover {
-    background: #f0fdf4;
+.btn-cultos {
+    background: var(--primary-orange);
+    color: white;
+}
+
+.btn-cultos:hover {
+    background: #ff5520;
+    transform: translateY(-2px);
+}
+
+.btn-create-culto {
+    background: var(--accent-red);
+    color: white;
+}
+
+.btn-create-culto:hover {
+    background: #ff2222;
+    transform: translateY(-2px);
+}
+
+.bottom-btn-text {
+    letter-spacing: 1px;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 1.5em;
+    .app-title {
+        font-size: 1em;
     }
 
-    .tabs {
+    .chords-grid-main {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .song-meta {
         flex-direction: column;
+        gap: 5px;
     }
 
-    .content {
-        padding: 20px;
+    .tone-controls {
+        gap: 20px;
     }
 
-    .acordes-grid {
-        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-    }
-
-    .transponer-botones {
-        justify-content: center;
-    }
-
-    .btn-transponer {
-        padding: 8px 12px;
-        font-size: 0.85em;
-    }
-
-    .cancion-actions,
-    .form-actions {
+    .bottom-actions {
         flex-direction: column;
+        gap: 10px;
     }
 
-    .form-actions button {
+    .song-lyrics {
+        font-size: 0.95em;
+    }
+    
+    .botones-accion-seleccion {
+        flex-wrap: wrap;
+    }
+    
+    .contador-seleccionadas {
         width: 100%;
     }
+}
 
-    .letra-display {
-        font-size: 0.9em;
-        padding: 15px;
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 15px;
     }
 
-    .modal-content {
-        padding: 20px;
+    .app-title {
+        font-size: 0.9em;
+    }
+
+    .search-container {
+        padding: 0 15px;
+    }
+
+    .container {
+        padding: 0 15px;
+    }
+
+    .chords-grid-main {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .chord-btn-main {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .form-textarea {
+        font-size: 0.9em;
     }
 }
