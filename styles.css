@@ -1,0 +1,445 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --bg: #eef2fb;
+    --bg2: #ffffff;
+    --bg3: #e4ecf7;
+    --card: #ffffff;
+    --border: #c4d2e8;
+    --border2: #9ab0d0;
+    --text: #1a2640;
+    --text2: #4a6080;
+    --text3: #8099b8;
+    --accent: #1d56c7;
+    --accent2: #1541a8;
+    --accent-light: #dbeafe;
+    --orange: #f97316;
+    --orange2: #ea6a0a;
+    --green: #16a34a;
+    --red: #dc2626;
+    --yellow: #b45309;
+    --purple: #6d28d9;
+    --chord-color: #1541a8;
+    --shadow: 0 1px 4px rgba(30,60,120,0.08);
+    --shadow2: 0 4px 16px rgba(30,60,120,0.12);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 72px;
+}
+
+/* HEADER */
+.main-header {
+    background: var(--accent);
+    position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 2px 8px rgba(29,86,199,0.3);
+}
+.header-content {
+    max-width: 900px; margin: 0 auto;
+    padding: 0 18px; display: flex;
+    align-items: center; gap: 14px; height: 52px;
+}
+.logo-container {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.18); border-radius: 9px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+}
+.app-title { flex: 1; font-size: 1.05em; font-weight: 700; letter-spacing: 1.2px; color: #fff; text-transform: uppercase; }
+.header-btn {
+    width: 34px; height: 34px; background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
+    color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.header-btn:hover { background: rgba(255,255,255,0.28); }
+
+/* SEARCH */
+.search-container { max-width: 900px; margin: 13px auto; padding: 0 18px; }
+.search-wrapper { position: relative; display: flex; align-items: center; }
+.search-icon { position: absolute; left: 14px; font-size: 16px; color: var(--text3); }
+.search-input {
+    width: 100%; padding: 11px 14px 11px 42px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-size: 0.95em;
+    font-family: inherit; box-shadow: var(--shadow);
+}
+.search-input::placeholder { color: var(--text3); }
+.search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+
+/* CONTAINER */
+.container { max-width: 900px; margin: 0 auto; padding: 0 18px; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* SECTION HEADER */
+.section-page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px; padding-bottom: 11px; border-bottom: 2px solid var(--border);
+}
+.section-page-header h2 { font-size: 1.15em; font-weight: 700; }
+.btn-crear-culto-inline {
+    padding: 8px 15px; background: var(--orange); border: none;
+    border-radius: 8px; color: #fff; font-weight: 700; font-size: 0.85em;
+    cursor: pointer; font-family: inherit; box-shadow: 0 2px 6px rgba(249,115,22,0.3);
+}
+.btn-crear-culto-inline:hover { background: var(--orange2); }
+
+/* SONG LIST */
+#cancionesList { display: flex; flex-direction: column; gap: 8px; }
+.cancion-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow); transition: border-color 0.15s, box-shadow 0.15s;
+}
+.cancion-item:hover { border-color: var(--accent); box-shadow: var(--shadow2); }
+.cancion-main-row { display: flex; align-items: center; padding: 13px 15px; gap: 13px; cursor: pointer; }
+.cancion-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: linear-gradient(135deg,var(--accent),#60a5fa);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.cancion-details { flex: 1; min-width: 0; }
+.cancion-title { font-size: 0.98em; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cancion-info { color: var(--text2); font-size: 0.8em; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.cancion-badge {
+    background: var(--accent-light); color: var(--accent); padding: 2px 7px;
+    border-radius: 5px; font-size: 0.82em; font-weight: 700; font-family: 'Courier New', monospace;
+}
+.chord-badge {
+    background: var(--accent-light); color: var(--chord-color);
+    padding: 1px 6px; border-radius: 4px; font-size: 0.76em;
+    font-weight: 600; font-family: 'Courier New', monospace;
+}
+.cancion-actions-bar { display: flex; border-top: 1px solid var(--bg3); }
+.cancion-action-btn {
+    flex: 1; padding: 8px 5px; background: transparent; border: none;
+    color: var(--text3); cursor: pointer; font-size: 0.77em; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    transition: background 0.12s, color 0.12s; border-right: 1px solid var(--bg3); font-family: inherit;
+}
+.cancion-action-btn:last-child { border-right: none; }
+.cancion-action-btn:hover { background: var(--bg3); }
+.cancion-action-btn.btn-ver:hover { color: var(--accent); }
+.cancion-action-btn.btn-editar:hover { color: var(--yellow); }
+.cancion-action-btn.btn-culto-add:hover { color: var(--orange); }
+.cancion-action-btn.btn-eliminar:hover { color: var(--red); }
+
+/* FORMS */
+.form-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 18px; padding-bottom: 12px; border-bottom: 2px solid var(--border);
+}
+.back-btn { background: transparent; border: none; color: var(--text2); font-size: 0.95em; cursor: pointer; display: flex; align-items: center; gap: 4px; font-family: inherit; }
+.back-btn:hover { color: var(--accent); }
+.form-header h2 { font-size: 1.15em; font-weight: 700; }
+.song-form { width: 100%; }
+
+/* EDITOR LAYOUT */
+.editor-layout { display: flex; gap: 12px; align-items: flex-start; }
+.editor-main { flex: 1; min-width: 0; }
+
+/* CHORD SIDEBAR */
+.chord-sidebar {
+    width: 112px; flex-shrink: 0; position: sticky; top: 58px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 9px 7px;
+    box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 5px;
+}
+.chord-sidebar-label {
+    font-size: 0.68em; font-weight: 700; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 1px;
+    padding-bottom: 5px; border-bottom: 1px solid var(--border);
+    margin-bottom: 2px; text-align: center;
+}
+.chord-main-btn {
+    display: block; width: 100%; padding: 8px 5px; border-radius: 7px; border: none;
+    color: #fff; font-weight: 700; font-size: 0.87em; cursor: pointer;
+    font-family: 'Courier New', monospace; transition: transform 0.1s; text-align: center;
+}
+.chord-main-btn:active { transform: scale(0.93); }
+.chord-main-btn.type-I   { background: var(--purple); }
+.chord-main-btn.type-IV  { background: var(--orange); }
+.chord-main-btn.type-V   { background: #b45309; }
+.chord-main-btn.type-vi  { background: var(--green); }
+.chord-main-btn.type-ii  { background: var(--accent); }
+.chord-main-btn.type-iii { background: #7c3aed; }
+.chord-expand-btn {
+    display: block; width: 100%; padding: 7px 5px;
+    background: var(--bg3); border: 1px dashed var(--border2);
+    border-radius: 7px; color: var(--accent); font-weight: 700;
+    font-size: 0.8em; cursor: pointer; font-family: inherit;
+    transition: all 0.15s; text-align: center; margin-top: 2px;
+}
+.chord-expand-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
+/* CHORD PANEL */
+.chord-panel-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,0.25); }
+.chord-panel-overlay.active { display: block; }
+.chord-panel {
+    display: none; position: fixed; right: 0; top: 0; bottom: 0;
+    width: 280px; background: var(--bg2); border-left: 2px solid var(--border);
+    z-index: 501; flex-direction: column; overflow: hidden;
+    box-shadow: -4px 0 20px rgba(30,60,120,0.15);
+}
+.chord-panel.open { display: flex; }
+.chord-panel-header {
+    padding: 13px 15px 10px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--accent); color: #fff;
+}
+.chord-panel-title { font-size: 0.9em; font-weight: 700; }
+.chord-panel-close {
+    background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px; color: #fff; width: 28px; height: 28px;
+    cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center;
+}
+.chord-panel-close:hover { background: rgba(255,255,255,0.35); }
+.chord-panel-filter {
+    padding: 10px 13px; border-bottom: 1px solid var(--border);
+    background: var(--bg3); display: flex; flex-direction: column; gap: 6px;
+}
+.filter-label { font-size: 0.68em; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; }
+.key-filter-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 4px; }
+.key-filter-btn {
+    padding: 5px 2px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 5px; color: var(--text2); font-size: 0.73em; font-weight: 700;
+    font-family: 'Courier New', monospace; cursor: pointer; text-align: center;
+}
+.key-filter-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.key-filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chord-panel-body { flex: 1; overflow-y: auto; padding: 11px 13px; display: flex; flex-direction: column; gap: 12px; }
+.chord-note-heading { font-size: 0.85em; font-weight: 700; color: var(--accent); margin-bottom: 5px; padding-bottom: 3px; border-bottom: 1px solid var(--accent-light); font-family: 'Courier New', monospace; }
+.chord-categ-label { font-size: 0.65em; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 6px; margin-bottom: 3px; }
+.chord-group-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 4px; }
+.panel-chord-btn {
+    padding: 8px 5px; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 7px; color: var(--text); font-size: 0.8em; font-weight: 700;
+    font-family: 'Courier New', monospace; cursor: pointer; text-align: center; transition: all 0.12s;
+}
+.panel-chord-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+.panel-chord-btn.type-I   { border-left: 3px solid var(--purple); }
+.panel-chord-btn.type-IV  { border-left: 3px solid var(--orange); }
+.panel-chord-btn.type-V   { border-left: 3px solid #b45309; }
+.panel-chord-btn.type-vi  { border-left: 3px solid var(--green); }
+.panel-chord-btn.type-ii  { border-left: 3px solid var(--accent); }
+.panel-chord-btn.type-extra { }
+
+/* FORM ELEMENTS */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.87em; color: var(--text2); }
+.help-icon { display: inline-block; width: 15px; height: 15px; background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); border-radius: 50%; text-align: center; line-height: 13px; font-size: 10px; cursor: help; margin-left: 4px; }
+.form-input, .form-select, .form-textarea {
+    width: 100%; padding: 10px 12px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 0.95em; font-family: inherit;
+}
+.form-textarea { resize: vertical; line-height: 1.65; font-family: 'Courier New', monospace; font-size: 0.88em; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.form-select option { background: #fff; }
+.form-hint { color: var(--text3); font-size: 0.77em; margin-top: 4px; display: block; }
+
+/* HARMONIC CIRCLE */
+.harmonic-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 13px; overflow: hidden; box-shadow: var(--shadow); }
+.harmonic-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 13px; background: var(--accent-light); border-bottom: 1px solid var(--border); }
+.harmonic-title { font-size: 0.84em; font-weight: 600; color: var(--accent2); }
+.harmonic-toggle { background: transparent; border: 1px solid var(--accent); border-radius: 5px; color: var(--accent); font-size: 0.74em; padding: 3px 8px; cursor: pointer; font-family: inherit; }
+.harmonic-toggle:hover { background: var(--accent); color: #fff; }
+#harmonicBody, #harmonicBodyEdit { padding: 10px 13px; }
+.harmonic-main-label { font-size: 0.74em; color: var(--text3); margin-bottom: 7px; }
+.harmonic-main-chords { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 9px; }
+.harmonic-chord-btn { padding: 7px 11px; border-radius: 7px; border: none; cursor: pointer; font-size: 0.87em; font-weight: 700; font-family: 'Courier New', monospace; transition: transform 0.1s; }
+.harmonic-chord-btn:active { transform: scale(0.93); }
+.harmonic-chord-btn.h-tonica   { background: var(--purple); color: #fff; }
+.harmonic-chord-btn.h-principal { background: var(--orange); color: #fff; }
+.harmonic-chord-btn.h-relativa  { background: #dcfce7; border: 1px solid #16a34a; color: #15803d; }
+.harmonic-extra-details { border-top: 1px solid var(--border); padding-top: 8px; margin-top: 3px; }
+.harmonic-extra-details summary { cursor: pointer; font-size: 0.8em; color: var(--text3); margin-bottom: 7px; user-select: none; }
+.harmonic-extra-chords { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.harmonic-chord-btn.h-extra { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); font-size: 0.79em; padding: 5px 9px; }
+.harmonic-chord-btn.h-extra:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* FORM ACTIONS */
+.form-actions-bottom { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.btn-save { flex: 1; padding: 12px 16px; background: var(--green); border: none; border-radius: 9px; color: #fff; font-size: 0.95em; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; font-family: inherit; }
+.btn-save:hover { background: #15803d; }
+.btn-cancel { flex: 1; padding: 12px 16px; background: transparent; border: 1px solid var(--border2); border-radius: 9px; color: var(--text2); font-size: 0.95em; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; font-family: inherit; }
+.btn-cancel:hover { border-color: var(--red); color: var(--red); }
+
+/* PREVIEW */
+.preview-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 15px; box-shadow: var(--shadow); }
+.preview-section h3 { font-size: 0.74em; color: var(--text3); margin-bottom: 9px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.preview-lyrics { color: var(--text); font-family: 'Courier New', monospace; font-size: 0.88em; line-height: 2.2; white-space: pre-wrap; min-height: 40px; }
+
+/* CULTOS */
+.culto-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow); }
+.culto-item:hover { box-shadow: var(--shadow2); transform: translateX(3px); }
+.culto-title { font-size: 1em; font-weight: 700; margin-bottom: 4px; }
+.culto-info { color: var(--text2); font-size: 0.84em; }
+.culto-detalle-info { background: var(--bg3); padding: 12px 14px; border-radius: 9px; margin-bottom: 14px; border: 1px solid var(--border); }
+.culto-detalle-info p { margin: 4px 0; color: var(--text2); font-size: 0.9em; }
+.culto-detalle-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.culto-detalle-actions h3 { font-size: 1em; font-weight: 700; }
+.btn-add-cancion-culto { padding: 7px 13px; background: var(--accent); border: none; border-radius: 7px; color: #fff; font-weight: 700; font-size: 0.84em; cursor: pointer; font-family: inherit; }
+.btn-add-cancion-culto:hover { background: var(--accent2); }
+.buscador-culto-container { margin-bottom: 10px; }
+.buscador-culto-container .form-input { margin-bottom: 6px; }
+.resultados-buscador { display: flex; flex-direction: column; gap: 5px; max-height: 200px; overflow-y: auto; }
+.resultado-cancion-item { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; gap: 10px; }
+.resultado-cancion-info { flex: 1; }
+.resultado-cancion-titulo { font-weight: 600; font-size: 0.9em; }
+.resultado-cancion-meta { color: var(--text2); font-size: 0.75em; margin-top: 2px; }
+.btn-agregar-resultado { padding: 6px 11px; background: var(--green); border: none; border-radius: 6px; color: #fff; font-weight: 700; font-size: 0.8em; cursor: pointer; white-space: nowrap; font-family: inherit; }
+.btn-agregar-resultado:hover { background: #15803d; }
+
+/* CULTO SONGS LIST (drag & drop) */
+.lista-canciones-culto { display: flex; flex-direction: column; gap: 7px; }
+.culto-cancion-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 9px;
+    padding: 9px 11px; display: flex; align-items: center; gap: 9px;
+    box-shadow: var(--shadow); transition: box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.culto-cancion-item.dragging { opacity: 0.35; border: 2px dashed var(--accent); }
+.culto-cancion-item.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); background: var(--accent-light); }
+.drag-handle { color: var(--text3); font-size: 1.1em; cursor: grab; padding: 2px 3px; flex-shrink: 0; user-select: none; touch-action: none; }
+.drag-handle:active { cursor: grabbing; color: var(--accent); }
+.culto-cancion-numero { width: 28px; height: 28px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.82em; flex-shrink: 0; color: #fff; }
+.culto-cancion-info { flex: 1; min-width: 0; }
+.culto-cancion-titulo { font-weight: 700; font-size: 0.92em; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.culto-cancion-meta { color: var(--text2); font-size: 0.75em; }
+.culto-cancion-btns { display: flex; gap: 4px; flex-shrink: 0; }
+.btn-ver-cancion-culto, .btn-edit-ton-culto, .btn-editar-cancion-culto { padding: 5px 9px; border-radius: 6px; font-weight: 700; font-size: 0.75em; cursor: pointer; font-family: inherit; transition: all 0.12s; }
+.btn-ver-cancion-culto { background: var(--accent); border: none; color: #fff; }
+.btn-ver-cancion-culto:hover { background: var(--accent2); }
+.btn-edit-ton-culto { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-edit-ton-culto:hover { border-color: var(--yellow); color: var(--yellow); }
+.btn-editar-cancion-culto { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
+.btn-editar-cancion-culto:hover { border-color: var(--yellow); color: var(--yellow); }
+
+/* TON CULTO MODAL */
+.ton-culto-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.ton-culto-btn { padding: 9px 4px; background: var(--bg3); border: 1px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; font-size: 0.85em; font-weight: 700; font-family: 'Courier New', monospace; text-align: center; }
+.ton-culto-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.ton-culto-btn.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-culto-remove { flex: 1; padding: 11px 15px; background: transparent; border: 1px solid var(--red); border-radius: 8px; color: var(--red); font-size: 0.9em; font-weight: 700; cursor: pointer; font-family: inherit; }
+.btn-culto-remove:hover { background: var(--red); color: #fff; }
+
+/* MODALS */
+.modal { display: none; position: fixed; inset: 0; background: rgba(15,30,60,0.45); z-index: 1000; overflow-y: auto; }
+.modal.active { display: block; }
+.modal-content { background: var(--bg2); max-width: 560px; margin: 40px auto; border-radius: 14px; padding: 21px; border: 1px solid var(--border); box-shadow: var(--shadow2); }
+.modal-header-simple { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 11px; border-bottom: 2px solid var(--border); }
+.modal-header-simple h2 { flex: 1; font-size: 1.1em; font-weight: 700; }
+.close-btn { background: transparent; border: 1px solid var(--border); border-radius: 7px; color: var(--text2); font-size: 1em; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+.close-btn:hover { border-color: var(--red); color: var(--red); }
+.form-actions-modal { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+/* MODAL VER CANCIÓN */
+.modal-content-song { background: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-y: auto; }
+.modal-song-header { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-bottom: 1px solid var(--border); background: var(--accent); position: sticky; top: 0; z-index: 10; }
+.back-modal-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 7px; color: #fff; font-size: 0.88em; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 5px 10px; font-family: inherit; }
+.back-modal-btn:hover { background: rgba(255,255,255,0.28); }
+.song-info-header { flex: 1; min-width: 0; }
+.song-info-header h2 { font-size: 1em; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+.song-meta { display: flex; gap: 10px; font-size: 0.77em; color: rgba(255,255,255,0.8); flex-wrap: wrap; }
+.edit-btn-header, .delete-btn-header { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 7px; color: #fff; cursor: pointer; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.edit-btn-header:hover, .delete-btn-header:hover { background: rgba(255,255,255,0.3); }
+
+/* Tone controls */
+.tone-controls { display: flex; align-items: center; justify-content: center; gap: 22px; padding: 10px 18px; background: #1e3a8a; border-bottom: 1px solid #1e40af; }
+.tone-btn { width: 42px; height: 42px; background: rgba(255,255,255,0.12); border: 2px solid rgba(255,255,255,0.25); border-radius: 50%; color: #fff; font-size: 1.5em; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; line-height: 1; font-family: inherit; }
+.tone-btn:hover { background: var(--orange); border-color: var(--orange); }
+.tone-display { text-align: center; min-width: 70px; }
+.tone-label { display: block; font-size: 0.64em; color: rgba(255,255,255,0.65); letter-spacing: 2px; font-weight: 700; margin-bottom: 1px; }
+.tone-value { font-size: 2em; font-weight: 800; color: #93c5fd; font-family: 'Courier New', monospace; }
+
+/* Text controls */
+.text-controls { display: flex; justify-content: center; align-items: center; gap: 8px; padding: 7px 18px; border-bottom: 1px solid var(--border); background: var(--bg3); }
+.text-btn { padding: 6px 13px; background: var(--bg2); border: 1px solid var(--border); border-radius: 7px; color: var(--text); cursor: pointer; font-family: inherit; font-size: 0.84em; font-weight: 600; }
+.text-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Autoscroll */
+.autoscroll-controls { display: flex; align-items: center; gap: 10px; padding: 7px 18px; border-bottom: 1px solid var(--border); background: var(--bg3); }
+.autoscroll-btn { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 7px; color: var(--text2); font-size: 0.82em; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+.autoscroll-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.autoscroll-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+.autoscroll-speed { display: flex; align-items: center; gap: 6px; margin-left: auto; color: var(--text2); font-size: 0.82em; font-weight: 600; }
+.speed-btn { width: 26px; height: 26px; background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; color: var(--text); cursor: pointer; font-size: 0.9em; display: flex; align-items: center; justify-content: center; font-family: inherit; font-weight: 700; }
+.speed-btn:hover { border-color: var(--accent); color: var(--accent); }
+.speed-value { font-family: 'Courier New', monospace; font-weight: 700; color: var(--accent); min-width: 24px; text-align: center; }
+
+/* Additional controls */
+.additional-controls { display: flex; gap: 8px; padding: 7px 18px; border-bottom: 1px solid var(--border); flex-wrap: wrap; background: var(--bg3); }
+.control-btn { padding: 6px 13px; border: none; border-radius: 7px; color: #fff; cursor: pointer; font-size: 0.82em; font-weight: 600; display: flex; align-items: center; gap: 5px; font-family: inherit; }
+.control-btn:hover { opacity: 0.88; }
+.btn-fullscreen { background: var(--text2); }
+.btn-share { background: #25D366; }
+
+/* Fullscreen */
+.exit-fullscreen-btn { display: none; position: fixed; top: 14px; right: 14px; padding: 9px 16px; background: rgba(220,38,38,0.9); border: none; border-radius: 8px; color: #fff; font-weight: 700; cursor: pointer; z-index: 9999; font-family: inherit; }
+.modal.fullscreen-mode .modal-song-header,
+.modal.fullscreen-mode .tone-controls,
+.modal.fullscreen-mode .text-controls,
+.modal.fullscreen-mode .autoscroll-controls,
+.modal.fullscreen-mode .additional-controls { display: none; }
+.modal.fullscreen-mode .exit-fullscreen-btn { display: block; }
+.modal.fullscreen-mode .song-lyrics-container { padding: 50px 20px 20px; height: 100vh; overflow-y: auto; }
+
+/* SONG LYRICS */
+.song-lyrics-container { padding: 18px 24px 60px; max-width: 800px; margin: 0 auto; flex: 1; width: 100%; }
+.song-lyrics { color: var(--text); font-family: 'Courier New', monospace; font-size: 1em; line-height: 2; }
+
+/* Each line: chord floats above text using the same monospace font as the original */
+.linea-letra {
+    position: relative;
+    padding-top: 22px;
+    padding-bottom: 4px;
+    min-height: 44px;
+    white-space: pre;
+    font-family: 'Courier New', monospace;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.acorde-flotante {
+    position: absolute;
+    top: 1px;
+    color: var(--chord-color);
+    font-weight: 700;
+    font-size: 0.87em;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: 'Courier New', monospace;
+}
+
+/* EMPTY/LOADING */
+.loading, .empty-state { text-align: center; padding: 55px 20px; color: var(--text2); }
+.empty-state-icon { font-size: 3.5em; margin-bottom: 13px; }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-around; background: var(--bg2); border-top: 2px solid var(--border); z-index: 200; height: 60px; box-shadow: 0 -2px 10px rgba(30,60,120,0.09); }
+.nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: transparent; border: none; color: var(--text3); cursor: pointer; padding: 8px 0; height: 100%; font-size: 0.68em; font-weight: 600; font-family: inherit; transition: color 0.15s; }
+.nav-btn:hover { color: var(--text); }
+.nav-btn.active { color: var(--accent); }
+.nav-icon { font-size: 20px; line-height: 1; }
+.nav-label { font-size: 0.7em; }
+.nav-btn-add { flex: 0 0 54px; width: 54px; height: 54px; background: var(--orange); border-radius: 50%; box-shadow: 0 -2px 12px rgba(249,115,22,0.35); position: relative; top: -12px; color: #fff !important; padding: 0; flex-direction: row; gap: 0; transition: transform 0.2s; }
+.nav-btn-add:hover { transform: scale(1.08); }
+.nav-icon-add { font-size: 28px; font-weight: 300; line-height: 1; color: #fff; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .chord-sidebar { width: 96px; }
+    .chord-main-btn { font-size: 0.8em; padding: 7px 3px; }
+}
+@media (max-width: 480px) {
+    .header-content, .search-container, .container { padding: 0 12px; }
+    .app-title { font-size: 0.82em; }
+    .modal-content { margin: 16px 10px; padding: 15px; }
+    .ton-culto-grid { grid-template-columns: repeat(3,1fr); }
+    .cancion-action-btn { font-size: 0.71em; padding: 7px 2px; }
+    .chord-sidebar { width: 86px; }
+    .song-lyrics-container { padding: 14px 12px 40px; }
+    .chord-panel { width: 100%; }
+}

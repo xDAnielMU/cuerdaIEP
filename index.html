@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1d56c7">
+    <title>Cancionero IEP</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-container">🎵</div>
+            <h1 class="app-title">Cancionero IEP</h1>
+            <button class="header-btn" onclick="instalarApp()" id="installBtn" title="Instalar App">⬇</button>
+        </div>
+    </header>
+
+    <!-- BÚSQUEDA -->
+    <div class="search-container" id="searchContainer">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchBox" placeholder="Buscar canciones..." oninput="buscarCanciones()">
+        </div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+
+        <!-- SECCIÓN CANCIONES -->
+        <div id="canciones-section" class="section active">
+            <div id="cancionesList"><div class="loading">Cargando canciones...</div></div>
+        </div>
+
+        <!-- SECCIÓN CULTOS -->
+        <div id="cultos-section" class="section">
+            <div class="section-page-header">
+                <h2>📋 Cultos Programados</h2>
+                <button class="btn-crear-culto-inline" onclick="mostrarModalNuevoCulto()">+ Nuevo Culto</button>
+            </div>
+            <div id="cultosList"><div class="loading">Cargando cultos...</div></div>
+        </div>
+
+        <!-- SECCIÓN EDITAR CANCIÓN -->
+        <div id="editar-section" class="section">
+            <div class="form-header">
+                <button class="back-btn" onclick="cancelarEdicion()">← Cancelar</button>
+                <h2>Editar Canción</h2>
+            </div>
+            <form id="formEditarCancion" onsubmit="guardarEdicionCancion(event)" class="song-form">
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="tituloEdit" required class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Artista</label>
+                    <input type="text" id="autorEdit" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Tonalidad Original</label>
+                    <select id="tonalidadEdit" required class="form-select" onchange="actualizarCirculoArmonicoEdit()">
+                        <option value="C">C (Do)</option><option value="C#">C# (Do#)</option>
+                        <option value="D">D (Re)</option><option value="D#">D# (Re#)</option>
+                        <option value="E">E (Mi)</option><option value="Em">Em (Mi menor)</option>
+                        <option value="F">F (Fa)</option><option value="F#">F# (Fa#)</option>
+                        <option value="G">G (Sol)</option><option value="G#">G# (Sol#)</option>
+                        <option value="A">A (La)</option><option value="A#">A# (La#)</option>
+                        <option value="Am">Am (La menor)</option><option value="B">B (Si)</option>
+                        <option value="Bm">Bm (Si menor)</option>
+                    </select>
+                </div>
+                <!-- CÍRCULO ARMÓNICO EDITAR -->
+                <div class="harmonic-section" id="harmonicSectionEdit">
+                    <div class="harmonic-header">
+                        <span class="harmonic-title">🎼 Acordes de <span id="harmonicKeyEdit">G</span></span>
+                        <button type="button" class="harmonic-toggle" onclick="toggleHarmonicEdit()">Colapsar ▲</button>
+                    </div>
+                    <div id="harmonicBodyEdit">
+                        <div class="harmonic-main-label">Acordes del tono (toca para insertar)</div>
+                        <div class="harmonic-main-chords" id="harmonicMainEdit"></div>
+                        <details class="harmonic-extra-details">
+                            <summary>Más acordes ▾</summary>
+                            <div class="harmonic-extra-chords" id="harmonicExtraEdit"></div>
+                        </details>
+                    </div>
+                </div>
+                <!-- EDITOR + SIDEBAR -->
+                <div class="editor-layout">
+                    <div class="editor-main">
+                        <div class="form-group">
+                            <label>Letra con Acordes *</label>
+                            <textarea id="letraEdit" required class="form-textarea" rows="18"
+                                placeholder="[Am]He deci[G]dido se[C]guir..."></textarea>
+                            <small class="form-hint">Coloca el cursor donde quieres el acorde y toca el botón lateral</small>
+                        </div>
+                    </div>
+                    <div class="chord-sidebar" id="chordSidebarEdit">
+                        <div class="chord-sidebar-label">Acordes</div>
+                        <div id="sidebarMainEdit"></div>
+                        <button type="button" class="chord-expand-btn" onclick="abrirPanelAcordes('letraEdit')">+ más</button>
+                    </div>
+                </div>
+                <div class="preview-section">
+                    <h3>Vista Previa</h3>
+                    <div id="vistaPreviewEdit" class="preview-lyrics"></div>
+                </div>
+                <div class="form-actions-bottom">
+                    <button type="submit" class="btn-save">💾 Guardar Cambios</button>
+                    <button type="button" class="btn-cancel" onclick="cancelarEdicion()">✕ Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- SECCIÓN AGREGAR CANCIÓN -->
+        <div id="agregar-section" class="section">
+            <div class="form-header">
+                <button class="back-btn" onclick="cambiarTab('canciones')">← Volver</button>
+                <h2>Nueva Canción</h2>
+            </div>
+            <form id="formNuevaCancion" onsubmit="guardarCancion(event)" class="song-form">
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="titulo" required class="form-input" placeholder="Nombre de la canción">
+                </div>
+                <div class="form-group">
+                    <label>Artista</label>
+                    <input type="text" id="autor" class="form-input" placeholder="Nombre del artista">
+                </div>
+                <div class="form-group">
+                    <label>Tonalidad Original</label>
+                    <select id="tonalidad" required class="form-select" onchange="actualizarCirculoArmonico()">
+                        <option value="C">C (Do)</option><option value="C#">C# (Do#)</option>
+                        <option value="D">D (Re)</option><option value="D#">D# (Re#)</option>
+                        <option value="E">E (Mi)</option><option value="Em">Em (Mi menor)</option>
+                        <option value="F">F (Fa)</option><option value="F#">F# (Fa#)</option>
+                        <option value="G" selected>G (Sol)</option><option value="G#">G# (Sol#)</option>
+                        <option value="A">A (La)</option><option value="A#">A# (La#)</option>
+                        <option value="Am">Am (La menor)</option><option value="B">B (Si)</option>
+                        <option value="Bm">Bm (Si menor)</option>
+                    </select>
+                </div>
+                <!-- CÍRCULO ARMÓNICO AGREGAR -->
+                <div class="harmonic-section" id="harmonicSection">
+                    <div class="harmonic-header">
+                        <span class="harmonic-title">🎼 Acordes de <span id="harmonicKey">G</span></span>
+                        <button type="button" class="harmonic-toggle" onclick="toggleHarmonic()">Colapsar ▲</button>
+                    </div>
+                    <div id="harmonicBody">
+                        <div class="harmonic-main-label">Acordes del tono (toca para insertar)</div>
+                        <div class="harmonic-main-chords" id="harmonicMain"></div>
+                        <details class="harmonic-extra-details">
+                            <summary>Más acordes ▾</summary>
+                            <div class="harmonic-extra-chords" id="harmonicExtra"></div>
+                        </details>
+                    </div>
+                </div>
+                <!-- EDITOR + SIDEBAR -->
+                <div class="editor-layout">
+                    <div class="editor-main">
+                        <div class="form-group">
+                            <label>Letra con Acordes * <span class="help-icon" title="[G], [Am], [D7]">?</span></label>
+                            <textarea id="letra" required class="form-textarea" rows="18"
+                                placeholder="[G]Grande y fu[D]erte&#10;[Em]es el Se[C]ñor"></textarea>
+                            <small class="form-hint">Coloca el cursor donde quieres el acorde y toca el botón lateral</small>
+                        </div>
+                    </div>
+                    <div class="chord-sidebar" id="chordSidebarAgregar">
+                        <div class="chord-sidebar-label">Acordes</div>
+                        <div id="sidebarMainAgregar"></div>
+                        <button type="button" class="chord-expand-btn" onclick="abrirPanelAcordes('letra')">+ más</button>
+                    </div>
+                </div>
+                <div class="form-actions-bottom">
+                    <button type="submit" class="btn-save">💾 Guardar</button>
+                    <button type="button" class="btn-cancel" onclick="cambiarTab('canciones')">✕ Cancelar</button>
+                </div>
+            </form>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- MODAL VER CANCIÓN -->
+    <div id="modalVerCancion" class="modal">
+        <div class="modal-content-song">
+            <div class="modal-song-header">
+                <button class="back-modal-btn" onclick="cerrarModal()">← Volver</button>
+                <div class="song-info-header">
+                    <h2 id="modalTitulo"></h2>
+                    <div class="song-meta">
+                        <span id="modalAutor"></span>
+                        <span id="modalTonRef"></span>
+                    </div>
+                </div>
+                <button class="edit-btn-header" onclick="editarCancionActual()" title="Editar">✏️</button>
+                <button class="delete-btn-header" onclick="eliminarCancionActual()" title="Eliminar">🗑️</button>
+            </div>
+            <div class="tone-controls">
+                <button class="tone-btn" onclick="transponerRapido(-1)">−</button>
+                <div class="tone-display">
+                    <span class="tone-label">TONO</span>
+                    <span class="tone-value" id="tonalidadActual">G</span>
+                </div>
+                <button class="tone-btn" onclick="transponerRapido(1)">+</button>
+            </div>
+            <div class="text-controls">
+                <button class="text-btn" onclick="decreaseFontSize()">aA −</button>
+                <button class="text-btn" onclick="increaseFontSize()">aA +</button>
+                <button class="text-btn" onclick="resetFontSize()">↺</button>
+            </div>
+            <div class="autoscroll-controls">
+                <button class="autoscroll-btn" id="autoscrollBtn" onclick="toggleAutoscroll()">▶ Autoscroll</button>
+                <div class="autoscroll-speed">
+                    <button class="speed-btn" onclick="cambiarVelocidad(-1)">−</button>
+                    <span class="speed-value" id="speedValue">2</span>
+                    <button class="speed-btn" onclick="cambiarVelocidad(1)">+</button>
+                </div>
+            </div>
+            <div class="additional-controls">
+                <button class="control-btn btn-fullscreen" onclick="activarPantallaCompleta()">⛶ Pantalla Completa</button>
+                <button class="control-btn btn-share" onclick="compartirPorWhatsApp()">📱 WhatsApp</button>
+            </div>
+            <div class="exit-fullscreen-btn" onclick="salirPantallaCompleta()">✕ Salir</div>
+            <div class="song-lyrics-container">
+                <div id="modalLetra" class="song-lyrics"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL EXPANDED CHORDS -->
+    <div class="chord-panel-overlay" id="chordPanelOverlay" onclick="cerrarPanelAcordes()"></div>
+    <div class="chord-panel" id="chordPanel">
+        <div class="chord-panel-header">
+            <span class="chord-panel-title">🎵 Tablero de Acordes</span>
+            <button class="chord-panel-close" onclick="cerrarPanelAcordes()">✕</button>
+        </div>
+        <div class="chord-panel-filter">
+            <div class="filter-label">Filtrar por nota base</div>
+            <div class="key-filter-grid" id="keyFilterGrid"></div>
+        </div>
+        <div class="chord-panel-body" id="chordPanelBody"></div>
+    </div>
+
+    <!-- MODAL DETALLE CULTO -->
+    <div id="modalDetalleCulto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header-simple">
+                <button class="back-btn" onclick="cerrarModalDetalleCulto()">← Volver</button>
+                <h2 id="detalleCultoTitulo"></h2>
+            </div>
+            <div class="culto-detalle-info">
+                <p id="detalleCultoFecha"></p>
+                <p><strong>Notas:</strong> <span id="detalleCultoNotas">Sin notas</span></p>
+            </div>
+            <div class="culto-detalle-actions">
+                <h3>Canciones del Culto</h3>
+                <button class="btn-add-cancion-culto" onclick="mostrarBuscadorCulto()">+ Agregar canción</button>
+            </div>
+            <div id="buscadorCultoContainer" class="buscador-culto-container" style="display:none">
+                <input type="text" id="buscadorCultoInput" class="form-input" placeholder="🔍 Buscar canción..." oninput="buscarCancionParaCulto()">
+                <div id="resultadosBuscadorCulto" class="resultados-buscador"></div>
+            </div>
+            <div id="listaCancionesCulto" class="lista-canciones-culto"></div>
+        </div>
+    </div>
+
+    <!-- MODAL TONALIDAD CULTO -->
+    <div id="modalTonCulto" class="modal">
+        <div class="modal-content" style="max-width:400px">
+            <div class="modal-header-simple">
+                <h2>Tonalidad en este culto</h2>
+                <button class="close-btn" onclick="cerrarModalTonCulto()">✕</button>
+            </div>
+            <p id="tonCultoCancionNombre" style="color:var(--text2);margin-bottom:12px"></p>
+            <label style="font-weight:600;margin-bottom:6px;display:block">Original: <span id="tonCultoOriginal" style="color:var(--accent);font-family:'Courier New',monospace;font-weight:700"></span></label>
+            <label style="font-weight:600;margin-bottom:9px;display:block">Selecciona tonalidad para este culto:</label>
+            <div class="ton-culto-grid" id="tonCultoGrid"></div>
+            <p id="tonCultoTransposicion" style="color:var(--accent);margin:9px 0;font-size:0.87em"></p>
+            <div class="form-actions-modal">
+                <button class="btn-save" onclick="guardarTonCulto()">💾 Guardar</button>
+                <button class="btn-culto-remove" onclick="quitarCancionDeCulto()">🗑 Quitar del culto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVO CULTO -->
+    <div id="modalNuevoCulto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header-simple">
+                <h2>Nuevo Culto</h2>
+                <button class="close-btn" onclick="cerrarModalCulto()">✕</button>
+            </div>
+            <form id="formNuevoCulto" onsubmit="guardarCulto(event)">
+                <div class="form-group"><label>Nombre *</label><input type="text" id="nombreCulto" required class="form-input" placeholder="Ej: Culto Domingo Mañana"></div>
+                <div class="form-group"><label>Fecha *</label><input type="date" id="fechaCulto" required class="form-input"></div>
+                <div class="form-group"><label>Hora *</label><input type="time" id="horaCulto" required class="form-input"></div>
+                <div class="form-group"><label>Notas</label><textarea id="notasCulto" class="form-textarea" rows="3" placeholder="Notas adicionales..."></textarea></div>
+                <div class="form-actions-modal">
+                    <button type="submit" class="btn-save">Crear Culto</button>
+                    <button type="button" class="btn-cancel" onclick="cerrarModalCulto()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL ASIGNAR CANCIÓN A CULTO -->
+    <div id="modalAsignarCulto" class="modal">
+        <div class="modal-content" style="max-width:420px">
+            <div class="modal-header-simple">
+                <h2>Agregar a Culto</h2>
+                <button class="close-btn" onclick="cerrarModalAsignarCulto()">✕</button>
+            </div>
+            <p id="asignarCancionNombre" style="color:var(--accent);font-weight:700;margin-bottom:13px"></p>
+            <div class="form-group"><label>Culto *</label>
+                <select id="cultoSelect" required class="form-select"><option value="">Selecciona un culto...</option></select></div>
+            <div class="form-group"><label>Tonalidad para este culto</label>
+                <select id="tonCultoSelect" class="form-select">
+                    <option value="original">Usar tonalidad original</option>
+                    <option value="C">C</option><option value="C#">C#</option>
+                    <option value="D">D</option><option value="D#">D#</option>
+                    <option value="E">E</option><option value="F">F</option>
+                    <option value="F#">F#</option><option value="G">G</option>
+                    <option value="G#">G#</option><option value="A">A</option>
+                    <option value="A#">A#</option><option value="B">B</option>
+                </select></div>
+            <div class="form-actions-modal">
+                <button class="btn-save" onclick="asignarCancionACultoDirecto()">📋 Agregar al culto</button>
+                <button class="btn-cancel" onclick="cerrarModalAsignarCulto()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MENÚ INFERIOR -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-btn active" id="nav-canciones" onclick="cambiarTab('canciones')">
+            <span class="nav-icon">🎵</span>
+            <span class="nav-label">Canciones</span>
+        </button>
+        <button class="nav-btn nav-btn-add" onclick="resetFormularioNuevaCancion(); cambiarTab('agregar')" id="nav-agregar">
+            <span class="nav-icon-add">+</span>
+        </button>
+        <button class="nav-btn" id="nav-cultos" onclick="cambiarTab('cultos')">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Cultos</span>
+        </button>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+</html>
