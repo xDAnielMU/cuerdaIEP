@@ -26,6 +26,11 @@ let cancionParaAsignar = null;
 let panelTextareaId = null;
 let panelKeyFiltro = null;
 
+// Clave de administrador para eliminar canciones
+// Valor por defecto local; se sobreescribe con el valor de Google Sheets al iniciar
+let CLAVE_ELIMINAR = 'IEP2026';
+let claveVerificadaEnSesion = false; // true mientras la sesión no se refresque
+
 // Drag & drop culto
 let dragSrcEl = null;
 let ordenCultoCanciones = []; // [{id, cancionId, orden, tonalidadUsada}, ...]
@@ -35,21 +40,30 @@ const NOTAS = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 
 // ===== ESCALAS DIATÓNICAS =====
 const escalas = {
-    'C':  { main: ['C','F','G','Am','Dm','Em'], extra: ['Bdim','Cmaj7','Fmaj7','G7','Am7','Dm7','Em7','Csus4','Gsus4','Fsus2'] },
-    'C#': { main: ['C#','F#','G#','A#m','D#m','Fm'], extra: ['C#maj7','F#maj7','G#7','A#m7','D#m7','C#sus4','F#sus4'] },
-    'D':  { main: ['D','G','A','Bm','Em','F#m'], extra: ['C#dim','Dmaj7','Gmaj7','A7','Bm7','Em7','Dsus4','Asus4'] },
-    'D#': { main: ['D#','G#','A#','Cm','Fm','Gm'], extra: ['Ddim','D#maj7','G#maj7','A#7','Cm7','Fm7','D#sus4'] },
-    'E':  { main: ['E','A','B','C#m','F#m','G#m'], extra: ['D#dim','Emaj7','Amaj7','B7','C#m7','F#m7','Esus4','Bsus4'] },
-    'F':  { main: ['F','Bb','C','Dm','Gm','Am'], extra: ['Edim','Fmaj7','Bbmaj7','C7','Dm7','Gm7','Fsus4','Csus4'] },
-    'F#': { main: ['F#','B','C#','D#m','G#m','A#m'], extra: ['Fdim','F#maj7','Bmaj7','C#7','D#m7','G#m7','F#sus4'] },
-    'G':  { main: ['G','C','D','Em','Am','Bm'], extra: ['F#dim','Gmaj7','Cmaj7','D7','Em7','Am7','Gsus4','Dsus4','Csus2'] },
-    'G#': { main: ['G#','C#','D#','Fm','A#m','Cm'], extra: ['Gdim','G#maj7','C#maj7','D#7','Fm7','A#m7','G#sus4'] },
-    'A':  { main: ['A','D','E','F#m','Bm','C#m'], extra: ['G#dim','Amaj7','Dmaj7','E7','F#m7','Bm7','Asus4','Esus4'] },
-    'A#': { main: ['A#','D#','F','Gm','Cm','Dm'], extra: ['Adim','A#maj7','D#maj7','F7','Gm7','Cm7','A#sus4'] },
-    'B':  { main: ['B','E','F#','G#m','C#m','D#m'], extra: ['A#dim','Bmaj7','Emaj7','F#7','G#m7','C#m7','Bsus4'] },
-    'Am': { main: ['Am','Dm','Em','C','F','G'], extra: ['Bdim','Am7','Dm7','Em7','Cmaj7','Fmaj7','Asus4'] },
-    'Em': { main: ['Em','Am','Bm','G','C','D'], extra: ['F#dim','Em7','Am7','Bm7','Gmaj7','Cmaj7','Esus4'] },
-    'Bm': { main: ['Bm','Em','F#m','G','A','D'], extra: ['C#dim','Bm7','Em7','F#m7','Gmaj7','Amaj7','Bsus4'] },
+    'C':   { main: ['C','F','G','Am','Dm','Em'], extra: ['Bdim','Cmaj7','Fmaj7','G7','Am7','Dm7','Em7','Csus4','Gsus4','Fsus2'] },
+    'Cm':  { main: ['Cm','Fm','Gm','Eb','Ab','Bb'], extra: ['Bdim','Cm7','Fm7','Gm7','Ebmaj7','Abmaj7','Bbmaj7','Cmsus4'] },
+    'C#':  { main: ['C#','F#','G#','A#m','D#m','Fm'], extra: ['C#maj7','F#maj7','G#7','A#m7','D#m7','C#sus4','F#sus4'] },
+    'C#m': { main: ['C#m','F#m','G#m','E','A','B'], extra: ['Bdim','C#m7','F#m7','G#m7','Emaj7','Amaj7','Bmaj7','C#msus4'] },
+    'D':   { main: ['D','G','A','Bm','Em','F#m'], extra: ['C#dim','Dmaj7','Gmaj7','A7','Bm7','Em7','Dsus4','Asus4'] },
+    'Dm':  { main: ['Dm','Gm','Am','F','Bb','C'], extra: ['C#dim','Dm7','Gm7','Am7','Fmaj7','Bbmaj7','Cmaj7','Dmsus4'] },
+    'D#':  { main: ['D#','G#','A#','Cm','Fm','Gm'], extra: ['Ddim','D#maj7','G#maj7','A#7','Cm7','Fm7','D#sus4'] },
+    'D#m': { main: ['D#m','G#m','A#m','F#','B','C#'], extra: ['Ddim','D#m7','G#m7','A#m7','F#maj7','Bmaj7','C#maj7'] },
+    'E':   { main: ['E','A','B','C#m','F#m','G#m'], extra: ['D#dim','Emaj7','Amaj7','B7','C#m7','F#m7','Esus4','Bsus4'] },
+    'Em':  { main: ['Em','Am','Bm','G','C','D'], extra: ['F#dim','Em7','Am7','Bm7','Gmaj7','Cmaj7','Esus4'] },
+    'F':   { main: ['F','Bb','C','Dm','Gm','Am'], extra: ['Edim','Fmaj7','Bbmaj7','C7','Dm7','Gm7','Fsus4','Csus4'] },
+    'Fm':  { main: ['Fm','Bbm','Cm','Ab','Db','Eb'], extra: ['Edim','Fm7','Bbm7','Cm7','Abmaj7','Dbmaj7','Ebmaj7'] },
+    'F#':  { main: ['F#','B','C#','D#m','G#m','A#m'], extra: ['Fdim','F#maj7','Bmaj7','C#7','D#m7','G#m7','F#sus4'] },
+    'F#m': { main: ['F#m','Bm','C#m','A','D','E'], extra: ['G#dim','F#m7','Bm7','C#m7','Amaj7','Dmaj7','Emaj7','F#msus4'] },
+    'G':   { main: ['G','C','D','Em','Am','Bm'], extra: ['F#dim','Gmaj7','Cmaj7','D7','Em7','Am7','Gsus4','Dsus4','Csus2'] },
+    'Gm':  { main: ['Gm','Cm','Dm','Bb','Eb','F'], extra: ['F#dim','Gm7','Cm7','Dm7','Bbmaj7','Ebmaj7','Fmaj7','Gmsus4'] },
+    'G#':  { main: ['G#','C#','D#','Fm','A#m','Cm'], extra: ['Gdim','G#maj7','C#maj7','D#7','Fm7','A#m7','G#sus4'] },
+    'G#m': { main: ['G#m','C#m','D#m','B','E','F#'], extra: ['Gdim','G#m7','C#m7','D#m7','Bmaj7','Emaj7','F#maj7'] },
+    'A':   { main: ['A','D','E','F#m','Bm','C#m'], extra: ['G#dim','Amaj7','Dmaj7','E7','F#m7','Bm7','Asus4','Esus4'] },
+    'Am':  { main: ['Am','Dm','Em','C','F','G'], extra: ['Bdim','Am7','Dm7','Em7','Cmaj7','Fmaj7','Asus4'] },
+    'A#':  { main: ['A#','D#','F','Gm','Cm','Dm'], extra: ['Adim','A#maj7','D#maj7','F7','Gm7','Cm7','A#sus4'] },
+    'A#m': { main: ['A#m','D#m','Fm','C#','F#','G#'], extra: ['Adim','A#m7','D#m7','Fm7','C#maj7','F#maj7','G#maj7'] },
+    'B':   { main: ['B','E','F#','G#m','C#m','D#m'], extra: ['A#dim','Bmaj7','Emaj7','F#7','G#m7','C#m7','Bsus4'] },
+    'Bm':  { main: ['Bm','Em','F#m','G','A','D'], extra: ['C#dim','Bm7','Em7','F#m7','Gmaj7','Amaj7','Bsus4'] },
 };
 
 const gradoClase = ['h-tonica','h-principal','h-principal','h-relativa','h-relativa','h-relativa'];
@@ -70,6 +84,7 @@ function generarAcordesDeNota(nota) {
 document.addEventListener('DOMContentLoaded', () => {
     sincronizarCanciones();
     sincronizarCultos();
+    cargarConfig();
     verificarInstalacion();
     actualizarCirculoArmonico();
     actualizarCirculoArmonicoEdit();
@@ -106,6 +121,45 @@ function renderSidebar(tonalidad, containerId, textareaId) {
         btn.onclick = () => insertarAcordeEnTextarea(acorde, textareaId);
         container.appendChild(btn);
     });
+}
+
+// ===== ACORDES TEMPORALES EN SIDEBAR (desde panel +más) =====
+// Guarda acordes extra agregados temporalmente por sesión de edición
+let acordesTemporalesSidebar = { letra: [], letraEdit: [] };
+
+function agregarAcordeTempAlSidebar(chord, textareaId) {
+    if (!textareaId) return;
+    // Determinar qué sidebar corresponde al textarea activo
+    const sidebarId = textareaId === 'letraEdit' ? 'sidebarMainEdit' : 'sidebarMainAgregar';
+    const container = document.getElementById(sidebarId);
+    if (!container) return;
+
+    // Evitar duplicados (tanto en base como en temp)
+    const yaExiste = Array.from(container.querySelectorAll('button')).some(b => b.textContent === chord);
+    if (yaExiste) return;
+
+    // Guardar en lista temporal
+    if (!acordesTemporalesSidebar[textareaId]) acordesTemporalesSidebar[textareaId] = [];
+    if (!acordesTemporalesSidebar[textareaId].includes(chord)) {
+        acordesTemporalesSidebar[textareaId].push(chord);
+    }
+
+    // Crear botón temporal en el sidebar con estilo distintivo
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chord-main-btn type-extra chord-temp-added';
+    btn.textContent = chord;
+    btn.title = 'Acorde temporal (desde panel)';
+    btn.onclick = () => insertarAcordeEnTextarea(chord, textareaId);
+    container.appendChild(btn);
+}
+
+function limpiarAcordesTemporalesSidebar(textareaId) {
+    acordesTemporalesSidebar[textareaId] = [];
+    const sidebarId = textareaId === 'letraEdit' ? 'sidebarMainEdit' : 'sidebarMainAgregar';
+    const container = document.getElementById(sidebarId);
+    if (!container) return;
+    container.querySelectorAll('.chord-temp-added').forEach(b => b.remove());
 }
 
 // ===== PANEL ACORDES EXPANDIDO =====
@@ -180,7 +234,10 @@ function renderPanelCuerpo(nota) {
                 btn.className = `panel-chord-btn ${categ.tipos[i] || 'type-extra'}`;
                 btn.textContent = chord;
                 btn.onclick = () => {
-                    if (panelTextareaId) insertarAcordeEnTextarea(chord, panelTextareaId);
+                    if (panelTextareaId) {
+                        insertarAcordeEnTextarea(chord, panelTextareaId);
+                        agregarAcordeTempAlSidebar(chord, panelTextareaId);
+                    }
                 };
                 grid.appendChild(btn);
             });
@@ -227,11 +284,13 @@ function actualizarCirculoArmonico() {
     if (keyLabel) keyLabel.textContent = ton;
     renderizarCirculo(escala, 'harmonicMain', 'harmonicExtra', 'letra', 'harmonicKey');
     renderSidebar(ton, 'sidebarMainAgregar', 'letra');
+    limpiarAcordesTemporalesSidebar('letra');
 }
 
 function actualizarCirculoArmonicoEdit() {
     const sel = document.getElementById('tonalidadEdit');
     if (!sel) return;
+    limpiarAcordesTemporalesSidebar('letraEdit');
     const ton = sel.value;
     const escala = getEscala(ton);
     const keyLabel = document.getElementById('harmonicKeyEdit');
@@ -475,7 +534,29 @@ function cerrarModal() {
 }
 
 // ===== AUTOSCROLL =====
-// El autoscroll hace scroll en el contenedor .modal-content-song
+// Escala lineal uniforme: vel 1=10, 2=20, 3=30, 4=40, 5=50, 6=60, 7=70, 8=80 px/s
+// 10px/s por nivel → diferencia constante entre niveles, sin saltos abismales
+function velocidadAPxSeg(vel) {
+    return vel * 10;
+}
+
+// Devuelve el contenedor que realmente tiene overflow scroll activo.
+// Se detecta dinámicamente probando cuál tiene scrollHeight > clientHeight.
+function getScrollContainer() {
+    // En fullscreen el elemento fullscreen es #modalVerCancion;
+    // dentro de él el único hijo que tiene overflow-y:auto con contenido
+    // es .song-lyrics-container (definido en CSS fullscreen-mode).
+    // En modo normal #modalVerCancion (position:fixed inset:0) es el que scrollea.
+    const modal = document.getElementById('modalVerCancion');
+    if (!modal) return null;
+    if (enPantallaCompleta) {
+        const lyricsContainer = modal.querySelector('.song-lyrics-container');
+        return lyricsContainer || modal;
+    }
+    // Modo normal: el modal mismo scrollea (overflow-y:auto, position:fixed inset:0)
+    return modal;
+}
+
 function toggleAutoscroll() {
     if (autoscrollActive) {
         detenerAutoscroll();
@@ -485,22 +566,30 @@ function toggleAutoscroll() {
 }
 
 function iniciarAutoscroll() {
+    // Si ya hay un RAF corriendo, cancelarlo primero
+    if (autoscrollRafId) {
+        cancelAnimationFrame(autoscrollRafId);
+        autoscrollRafId = null;
+    }
     autoscrollActive = true;
     const btn = document.getElementById('autoscrollBtn');
     if (btn) { btn.classList.add('active'); btn.textContent = '⏸ Pausar'; }
 
-    const contenedor = document.querySelector('.modal-content-song');
-    if (!contenedor) return;
-
     let ultimoTs = null;
-    const pixelesPorSeg = autoscrollSpeed * 14;
 
     function frame(ts) {
         if (!autoscrollActive) return;
+        const cont = getScrollContainer();
+        if (!cont) {
+            autoscrollRafId = requestAnimationFrame(frame);
+            return;
+        }
         if (ultimoTs !== null) {
-            const delta = (ts - ultimoTs) / 1000;
-            contenedor.scrollTop += pixelesPorSeg * delta;
-            if (contenedor.scrollTop + contenedor.clientHeight >= contenedor.scrollHeight - 5) {
+            const delta = Math.min((ts - ultimoTs) / 1000, 0.08);
+            const pxSeg = velocidadAPxSeg(autoscrollSpeed);
+            cont.scrollTop += pxSeg * delta;
+            // Detectar fin: cuando no queda más contenido para hacer scroll
+            if (cont.scrollTop + cont.clientHeight >= cont.scrollHeight - 4) {
                 detenerAutoscroll();
                 return;
             }
@@ -526,7 +615,9 @@ function cambiarVelocidad(delta) {
     autoscrollSpeed = Math.max(1, Math.min(8, autoscrollSpeed + delta));
     document.getElementById('speedValue').textContent = autoscrollSpeed;
     if (autoscrollActive) {
-        detenerAutoscroll();
+        // Reiniciar con nueva velocidad sin perder posición
+        cancelAnimationFrame(autoscrollRafId);
+        autoscrollRafId = null;
         iniciarAutoscroll();
     }
 }
@@ -655,26 +746,43 @@ function actualizarVistaPreview() {
     });
 }
 
-// ===== ELIMINAR =====
+// ===== ELIMINAR (protegido por clave) =====
+function pedirClaveYEliminar(callback) {
+    if (claveVerificadaEnSesion) { callback(); return; }
+    const clave = prompt('🔐 Ingresa la clave de administrador para eliminar:');
+    if (clave === null) return; // canceló
+    if (clave === CLAVE_ELIMINAR) {
+        claveVerificadaEnSesion = true;
+        callback();
+    } else {
+        alert('❌ Clave incorrecta. No se puede eliminar.');
+    }
+}
+
 async function eliminarCancionPorId(id, titulo, event) {
     event.stopPropagation();
-    if (!confirm(`¿Seguro que deseas eliminar "${titulo}"?`)) return;
-    try {
-        const response = await fetch(`${API_URL}?action=eliminarCancion`, { method: 'POST', body: JSON.stringify({ id }) });
-        const result = await response.json();
-        if (result.success) { alert('✅ Canción eliminada'); sincronizarCanciones(); }
-        else alert('❌ No se pudo eliminar');
-    } catch (error) { alert('❌ Error de conexión'); }
+    pedirClaveYEliminar(async () => {
+        if (!confirm(`¿Seguro que deseas eliminar "${titulo}"?\nEsta acción no se puede deshacer.`)) return;
+        try {
+            const response = await fetch(API_URL + '?action=eliminarCancion', { method: 'POST', body: JSON.stringify({ id }) });
+            const result = await response.json();
+            if (result.success) { sincronizarCanciones(); }
+            else alert('❌ No se pudo eliminar');
+        } catch (error) { alert('❌ Error de conexión'); }
+    });
 }
 
 async function eliminarCancionActual() {
     if (!cancionActual) return;
-    if (!confirm(`¿Seguro que deseas eliminar "${cancionActual.titulo}"?`)) return;
-    try {
-        const response = await fetch(`${API_URL}?action=eliminarCancion`, { method: 'POST', body: JSON.stringify({ id: cancionActual.id }) });
-        const result = await response.json();
-        if (result.success) { alert('✅ Canción eliminada'); cerrarModal(); sincronizarCanciones(); }
-    } catch (error) { alert('❌ Error al eliminar'); }
+    pedirClaveYEliminar(async () => {
+        if (!confirm(`¿Seguro que deseas eliminar "${cancionActual.titulo}"?\nEsta acción no se puede deshacer.`)) return;
+        const id = cancionActual.id;
+        try {
+            const response = await fetch(API_URL + '?action=eliminarCancion', { method: 'POST', body: JSON.stringify({ id }) });
+            const result = await response.json();
+            if (result.success) { cerrarModal(); sincronizarCanciones(); }
+        } catch (error) { alert('❌ Error al eliminar'); }
+    });
 }
 
 // ===== ASIGNAR A CULTO =====
@@ -794,18 +902,25 @@ function updateFontSize() {
 
 // ===== FULLSCREEN =====
 function activarPantallaCompleta() {
+    const eraActivo = autoscrollActive;
+    if (eraActivo) detenerAutoscroll();
     enPantallaCompleta = true;
     const modal = document.getElementById('modalVerCancion');
     modal.classList.add('fullscreen-mode');
     if (modal.requestFullscreen) modal.requestFullscreen();
     else if (modal.webkitRequestFullscreen) modal.webkitRequestFullscreen();
+    // Reiniciar autoscroll tras breve espera para que el DOM renderice
+    if (eraActivo) setTimeout(iniciarAutoscroll, 200);
 }
 
 function salirPantallaCompleta() {
+    const eraActivo = autoscrollActive;
+    if (eraActivo) detenerAutoscroll();
     enPantallaCompleta = false;
     document.getElementById('modalVerCancion').classList.remove('fullscreen-mode');
     if (document.exitFullscreen) document.exitFullscreen();
     else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    if (eraActivo) setTimeout(iniciarAutoscroll, 200);
 }
 
 // ===== WHATSAPP (formato mejorado: acordes en línea propia) =====
@@ -868,10 +983,23 @@ function instalarApp() {
 // ===== CULTOS =====
 async function sincronizarCultos() {
     try {
-        const response = await fetch(`${API_URL}?action=obtenerCultos`);
+        const response = await fetch(API_URL + '?action=obtenerCultos');
         const data = await response.json();
         if (data.success) { cultos = data.data; mostrarCultos(cultos); }
     } catch (error) { console.error('Error cultos:', error); }
+}
+
+async function cargarConfig() {
+    try {
+        const response = await fetch(API_URL + '?action=obtenerConfig');
+        const data = await response.json();
+        if (data.success && data.data && data.data.clave_eliminar) {
+            CLAVE_ELIMINAR = data.data.clave_eliminar;
+        }
+    } catch (error) {
+        // Usar clave local por defecto si falla la conexión
+        console.warn('No se pudo cargar config, usando clave local.');
+    }
 }
 
 function mostrarCultos(lista) {
@@ -881,11 +1009,28 @@ function mostrarCultos(lista) {
         return;
     }
     container.innerHTML = lista.map(c => `
-        <div class="culto-item" onclick="verCulto(${c.id})">
-            <div class="culto-title">${c.nombre}</div>
-            <div class="culto-info">📅 ${c.fecha} &nbsp;|&nbsp; ⏰ ${c.hora}</div>
-            ${c.notas ? `<p style="margin-top:5px;color:var(--text2);font-size:0.83em">${c.notas}</p>` : ''}
+        <div class="culto-item-row">
+            <div class="culto-item" onclick="verCulto(${c.id})">
+                <div class="culto-title">${c.nombre}</div>
+                <div class="culto-info">📅 ${c.fecha} &nbsp;|&nbsp; ⏰ ${c.hora}</div>
+                ${c.notas ? `<p style="margin-top:5px;color:var(--text2);font-size:0.83em">${c.notas}</p>` : ''}
+            </div>
+            <button class="btn-eliminar-culto" onclick="eliminarCulto(${c.id}, '${c.nombre.replace(/'/g,"\'")}', event)" title="Eliminar culto">🗑</button>
         </div>`).join('');
+}
+
+async function eliminarCulto(id, nombre, event) {
+    event.stopPropagation();
+    if (!confirm(`¿Eliminar el culto "${nombre}"?\nEsto también quitará todas sus canciones asignadas.`)) return;
+    try {
+        const response = await fetch(API_URL + '?action=eliminarCulto', {
+            method: 'POST',
+            body: JSON.stringify({ id })
+        });
+        const result = await response.json();
+        if (result.success) { sincronizarCultos(); }
+        else alert('❌ Error al eliminar: ' + (result.error || ''));
+    } catch (error) { alert('❌ Error de conexión'); }
 }
 
 async function verCulto(id) {
@@ -949,6 +1094,7 @@ function renderizarCancionesCulto(cancionesDelCulto) {
                 <button class="btn-edit-ton-culto" onclick="abrirModalTonCulto(${itemJSON}, event)" title="Cambiar tonalidad">🎼</button>
                 <button class="btn-ver-cancion-culto" onclick="verCancionDesdeCulto(${cancion.id})">👁 Ver</button>
                 <button class="btn-editar-cancion-culto" onclick="editarCancionDesdeCulto(${cancion.id})">✏️</button>
+                <button class="btn-quitar-cancion-culto" onclick="quitarCancionDeCultoDirecto(${item.id}, event)" title="Quitar del culto">✕</button>
             </div>`;
 
         // Drag events
@@ -1049,16 +1195,32 @@ function onTouchStart(e) {
 }
 
 async function guardarOrdenCulto() {
-    // Actualizar orden de cada canción en servidor
+    const container = document.getElementById('listaCancionesCulto');
+    let indicator = document.getElementById('ordenGuardandoMsg');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'ordenGuardandoMsg';
+        indicator.style.cssText = 'text-align:center;padding:6px;font-size:0.82em;color:var(--text3);background:var(--bg3);border-radius:6px;margin:4px 0;';
+        if (container.firstChild) container.insertBefore(indicator, container.firstChild);
+        else container.appendChild(indicator);
+    }
+    indicator.textContent = '💾 Guardando orden...';
+    indicator.style.color = 'var(--text3)';
     try {
-        for (const item of ordenCultoCanciones) {
-            await fetch(`${API_URL}?action=actualizarOrdenCulto`, {
+        await Promise.all(ordenCultoCanciones.map(item =>
+            fetch(API_URL + '?action=actualizarOrdenCulto', {
                 method: 'POST',
                 body: JSON.stringify({ id: item.id, orden: item.orden })
-            });
-        }
+            })
+        ));
+        indicator.textContent = '✅ Orden guardado';
+        indicator.style.color = 'var(--green)';
+        setTimeout(() => { if (indicator.parentNode) indicator.parentNode.removeChild(indicator); }, 1800);
     } catch (error) {
         console.error('Error guardando orden:', error);
+        indicator.textContent = '❌ Error al guardar orden';
+        indicator.style.color = 'var(--red)';
+        setTimeout(() => { if (indicator.parentNode) indicator.parentNode.removeChild(indicator); }, 2500);
     }
 }
 
@@ -1097,17 +1259,21 @@ async function agregarCancionAlCultoDesdeModal(cancionId) {
     if (!cultoActualId) return;
     const cancion = canciones.find(c => c.id == cancionId);
     if (!cancion) return;
-    const resExistentes = await fetch(`${API_URL}?action=obtenerCancionesCulto&cultoId=${cultoActualId}`);
-    const dataExistentes = await resExistentes.json();
-    const orden = dataExistentes.success ? dataExistentes.data.length + 1 : 1;
+    // Verificar duplicado usando la lista en memoria
+    const yaTiene = ordenCultoCanciones.some(i => i.cancionId == cancionId);
+    if (yaTiene) {
+        alert(`⚠️ "${cancion.titulo}" ya está en este culto.`);
+        return;
+    }
+    const orden = ordenCultoCanciones.length + 1;
     try {
-        const response = await fetch(`${API_URL}?action=agregarCancionACulto`, {
+        const response = await fetch(API_URL + '?action=agregarCancionACulto', {
             method: 'POST',
             body: JSON.stringify({ cultoId: cultoActualId, cancionId, orden, tonalidadUsada: cancion.tonalidad })
         });
         const result = await response.json();
         if (result.success) {
-            const res2 = await fetch(`${API_URL}?action=obtenerCancionesCulto&cultoId=${cultoActualId}`);
+            const res2 = await fetch(API_URL + '?action=obtenerCancionesCulto&cultoId=' + cultoActualId);
             const data2 = await res2.json();
             if (data2.success) { ordenCultoCanciones = data2.data; renderizarCancionesCulto(data2.data); }
             document.getElementById('buscadorCultoContainer').style.display = 'none';
@@ -1181,15 +1347,25 @@ async function quitarCancionDeCulto() {
     if (!cultoCancionItem) return;
     const cancion = canciones.find(c => c.id == cultoCancionItem.cancionId);
     if (!confirm(`¿Quitar "${cancion ? cancion.titulo : 'esta canción'}" del culto?`)) return;
+    await _quitarCancionCultoById(cultoCancionItem.id);
+    cerrarModalTonCulto();
+}
+
+async function quitarCancionDeCultoDirecto(itemId, event) {
+    event.stopPropagation();
+    if (!confirm('¿Quitar esta canción del culto?')) return;
+    await _quitarCancionCultoById(itemId);
+}
+
+async function _quitarCancionCultoById(itemId) {
     try {
-        const response = await fetch(`${API_URL}?action=quitarCancionCulto`, {
+        const response = await fetch(API_URL + '?action=quitarCancionCulto', {
             method: 'POST',
-            body: JSON.stringify({ id: cultoCancionItem.id })
+            body: JSON.stringify({ id: itemId })
         });
         const result = await response.json();
         if (result.success) {
-            cerrarModalTonCulto();
-            const res2 = await fetch(`${API_URL}?action=obtenerCancionesCulto&cultoId=${cultoActualId}`);
+            const res2 = await fetch(API_URL + '?action=obtenerCancionesCulto&cultoId=' + cultoActualId);
             const data2 = await res2.json();
             if (data2.success) { ordenCultoCanciones = data2.data; renderizarCancionesCulto(data2.data); }
         } else { alert('❌ Error al quitar'); }

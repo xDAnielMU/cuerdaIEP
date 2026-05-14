@@ -166,6 +166,13 @@ body {
 .chord-main-btn.type-vi  { background: var(--green); }
 .chord-main-btn.type-ii  { background: var(--accent); }
 .chord-main-btn.type-iii { background: #7c3aed; }
+.chord-main-btn.type-extra { background: #475569; }
+/* Acordes temporales añadidos desde panel +más */
+.chord-temp-added {
+    background: #0e7490 !important;
+    border: 1.5px dashed rgba(255,255,255,0.5) !important;
+    opacity: 0.92;
+}
 .chord-expand-btn {
     display: block; width: 100%; padding: 7px 5px;
     background: var(--bg3); border: 1px dashed var(--border2);
@@ -273,10 +280,19 @@ body {
 .preview-lyrics { color: var(--text); font-family: 'Courier New', monospace; font-size: 0.88em; line-height: 2.2; white-space: pre-wrap; min-height: 40px; }
 
 /* CULTOS */
-.culto-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; padding: 13px 15px; margin-bottom: 8px; cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow); }
+.culto-item-row { display: flex; align-items: stretch; gap: 6px; margin-bottom: 8px; }
+.culto-item-row .culto-item { flex: 1; margin-bottom: 0; }
+.culto-item { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 10px; padding: 13px 15px; cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow); }
 .culto-item:hover { box-shadow: var(--shadow2); transform: translateX(3px); }
 .culto-title { font-size: 1em; font-weight: 700; margin-bottom: 4px; }
 .culto-info { color: var(--text2); font-size: 0.84em; }
+.btn-eliminar-culto {
+    flex-shrink: 0; width: 38px; background: transparent;
+    border: 1px solid var(--border); border-radius: 10px;
+    color: var(--text3); font-size: 1em; cursor: pointer;
+    transition: all 0.15s; display: flex; align-items: center; justify-content: center;
+}
+.btn-eliminar-culto:hover { background: #fee2e2; border-color: var(--red); color: var(--red); }
 .culto-detalle-info { background: var(--bg3); padding: 12px 14px; border-radius: 9px; margin-bottom: 14px; border: 1px solid var(--border); }
 .culto-detalle-info p { margin: 4px 0; color: var(--text2); font-size: 0.9em; }
 .culto-detalle-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
@@ -309,13 +325,15 @@ body {
 .culto-cancion-titulo { font-weight: 700; font-size: 0.92em; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .culto-cancion-meta { color: var(--text2); font-size: 0.75em; }
 .culto-cancion-btns { display: flex; gap: 4px; flex-shrink: 0; }
-.btn-ver-cancion-culto, .btn-edit-ton-culto, .btn-editar-cancion-culto { padding: 5px 9px; border-radius: 6px; font-weight: 700; font-size: 0.75em; cursor: pointer; font-family: inherit; transition: all 0.12s; }
+.btn-ver-cancion-culto, .btn-edit-ton-culto, .btn-editar-cancion-culto, .btn-quitar-cancion-culto { padding: 5px 9px; border-radius: 6px; font-weight: 700; font-size: 0.75em; cursor: pointer; font-family: inherit; transition: all 0.12s; }
 .btn-ver-cancion-culto { background: var(--accent); border: none; color: #fff; }
 .btn-ver-cancion-culto:hover { background: var(--accent2); }
 .btn-edit-ton-culto { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
 .btn-edit-ton-culto:hover { border-color: var(--yellow); color: var(--yellow); }
 .btn-editar-cancion-culto { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
 .btn-editar-cancion-culto:hover { border-color: var(--yellow); color: var(--yellow); }
+.btn-quitar-cancion-culto { background: transparent; border: 1px solid var(--border2); color: var(--text3); font-size: 0.82em; font-weight: 900; }
+.btn-quitar-cancion-culto:hover { background: #fee2e2; border-color: var(--red); color: var(--red); }
 
 /* TON CULTO MODAL */
 .ton-culto-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
@@ -336,7 +354,7 @@ body {
 .form-actions-modal { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
 
 /* MODAL VER CANCIÓN */
-.modal-content-song { background: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-y: auto; }
+.modal-content-song { background: #fff; min-height: 100vh; display: flex; flex-direction: column; overflow-y: visible; }
 .modal-song-header { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-bottom: 1px solid var(--border); background: var(--accent); position: sticky; top: 0; z-index: 10; }
 .back-modal-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 7px; color: #fff; font-size: 0.88em; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 5px 10px; font-family: inherit; }
 .back-modal-btn:hover { background: rgba(255,255,255,0.28); }
@@ -384,7 +402,22 @@ body {
 .modal.fullscreen-mode .autoscroll-controls,
 .modal.fullscreen-mode .additional-controls { display: none; }
 .modal.fullscreen-mode .exit-fullscreen-btn { display: block; }
-.modal.fullscreen-mode .song-lyrics-container { padding: 50px 20px 20px; height: 100vh; overflow-y: auto; }
+/* En fullscreen: desactivar scroll del modal y modal-content-song,
+   dejar que SOLO .song-lyrics-container scrollee */
+.modal.fullscreen-mode { overflow: hidden; }
+.modal.fullscreen-mode .modal-content-song {
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.modal.fullscreen-mode .song-lyrics-container {
+    padding: 50px 20px 20px;
+    flex: 1;
+    overflow-y: auto;
+    height: auto;
+    -webkit-overflow-scrolling: touch;
+}
 
 /* SONG LYRICS */
 .song-lyrics-container { padding: 18px 24px 60px; max-width: 800px; margin: 0 auto; flex: 1; width: 100%; }
